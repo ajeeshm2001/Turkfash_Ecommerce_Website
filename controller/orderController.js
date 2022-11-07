@@ -4,10 +4,7 @@ var categoryhelpers = require("../helpers/category_helpers");
 var bannerhelpers = require("../helpers/banner_helpers");
 const coupon_helpers = require("../helpers/coupon_helpers");
 const { CART_HELPERS } = require("../config/collection");
-const client = require("twilio")(
-  "AC2df2b08fbaf9f0d29c8d4bd67d5f8455",
-  "27ea64cb69f0e77816bfa8d7d48c2817"
-);
+
 
 
 module.exports.userPlaceOrder= async (req, res) => {
