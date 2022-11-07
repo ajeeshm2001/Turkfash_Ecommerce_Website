@@ -6,8 +6,8 @@ const { CART_HELPERS } = require("../config/collection");
 const coupon_helpers = require("../helpers/coupon_helpers");
 
 const client = require("twilio")(
-  "AC2df2b08fbaf9f0d29c8d4bd67d5f8455",
-  "27ea64cb69f0e77816bfa8d7d48c2817"
+  process.env.TWILIO_SID_KEY,
+  process.env.TWILIO_SECRET_KEY
 );
 let ad
 let s;
@@ -126,6 +126,7 @@ module.exports.userOtpSendCode= (req, res) => {
           res.redirect("/otpverification");
         })
         .catch((err) => {
+          console.log(err);
         });
     } else {
       req.session.otperr = "User Does Not Exist";
