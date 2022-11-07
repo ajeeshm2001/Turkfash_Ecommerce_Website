@@ -1,0 +1,31 @@
+ <main id="main" class="main">
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mt-3">
+                <h2>Edit Category</h2>
+                <form action="/admin/editcategory/{{viewcategory._id}}" method="post" enctype="multipart/form-data">
+                    <label for="">Category Name</label>
+                    <input type="text" name="Name" class="form-control" value="{{viewcategory.Name}}">
+                    <br>
+                    <label class="form-label" for="form3Example4cg">Image</label>
+                    <img src="/pictures/categoryimages/{{viewcategory.img}}" alt="" style="width: 100px; height: auto;" id="imgView">
+                    {{!-- <img src="/category-images/{{viewcategory._id}}.jpg" alt="" style="width: 100px; height: auto;" id="imgView"> --}}
+                    <br>
+                    <br>
+                    <input type="file" id="form3Example4cg" class="form-control form-control" name="file" onchange="viewImage(event)" accept="image/apng, image/avif, image/gif, image/jpeg, image/png, image/svg+xml, image/webp" value="{{viewcategory.img}}" />
+                 
+                  
+                    <button type="submit" class="btn btn-success mt-3">Add Category</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+<script>
+    function viewImage(event){
+        document.getElementById('imgView').src=URL.createObjectURL(event.target.files[0])
+    }
+</script>

@@ -1,0 +1,80 @@
+<main id="main" class="main">
+  <section>
+    <div class="container">
+<table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Image</th>
+                   <th scope="col">Product Name</th>
+                    <th scope="col">Current Product Offer</th>
+                    <th scope="col">Add Offer</th>
+                    <th scope="col">Delete Offer</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {{#each products}}
+                  <tr>
+                    <th scope="row">{{inc @index}}</th>
+                    <td><img src="/pictures/productimages/{{this.img.[3]}}" alt="" style="width: 50px;height: auto;"></td>
+                    <td>{{this.Name}}</td>
+                    <td  style="color: green;"><span id="{{this._id}}">{{this.productoffer}}</span> </td>
+                    <td><button class="btn btn-primary" onclick="addOffer('{{this._id}}')">Add Offer</button></td>
+                    <td><button class="btn btn-danger" onclick="deleteoffer('{{this._id}}')">Delete Offer</button></td>
+                  </tr>
+                  {{/each}}
+                  
+                </tbody>
+              </table>
+    </div>
+  </section>
+  <script>
+    function addOffer(proId){
+        swal("Enter Your Offer Percentage :", {
+  content: "input",
+})
+.then((value) => {
+  console.log(value)
+  $.ajax({
+    url:'/admin/addoffer',
+    data:{
+      productId:proId,
+      productOffer:value
+    },
+    method:'put',
+    success:(response)=>{
+      document.getElementById(proId).innerHTML=value
+    }
+  })
+});
+    }
+
+    function deleteoffer(proId){
+
+        swal({
+  title: "Are you sure Want to Delete?",
+  icon:"warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    $.ajax({
+        url:'/admin/deleteoffer',
+        data:{
+          productid:proId
+        },
+        type:'delete',
+        success:(response)=>{
+          if(response.status){
+      document.getElementById(proId).innerHTML=""
+          }
+        }
+      })
+  }
+});
+
+      
+    }
+  </script>
+</main>

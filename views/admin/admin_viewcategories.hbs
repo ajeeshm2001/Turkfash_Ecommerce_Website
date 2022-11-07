@@ -1,0 +1,65 @@
+<main id="main" class="main">
+  <section>
+    <div class="container">
+      <table class="table table-striped" id="myTable">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Category Name</th>
+            <th scope="col">Options</th>
+           
+            
+          </tr>
+        </thead>
+        <tbody>
+            {{#each category}}
+          <tr>
+            
+            <th scope="row">{{inc @index}}</th>
+            <td>{{this.Name}}</td>
+            <td>
+              <a href="/admin/editcategory/{{this._id}}"class="btn btn-success">Edit</a>
+              <button class="btn btn-danger" onclick="deleteCategory('{{this._id}}')" >Delete</button>
+            </td>
+            
+           
+            
+               
+            {{!-- <td><img src="/product-images/{{this._id}}.jpg" alt="" style="width:50px ;"></td> --}}
+           
+          </tr>
+          {{/each}}
+
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+<script>
+  $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+
+function deleteCategory(catId){
+  console.log("Hellooo")
+  swal({
+  title: "Are you sure Want to Delete?",
+  icon:"warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+    $.ajax({
+    url:'/admin/deletecategory/'+catId,
+    method:'delete',
+    success:(response)=>{
+      location.reload()
+    }
+  })
+  }
+});
+  
+}
+</script>

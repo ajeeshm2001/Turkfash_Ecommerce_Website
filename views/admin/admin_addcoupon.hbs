@@ -1,0 +1,21 @@
+<main id="main" class="main">
+<form class="row g-3" action="/admin/addcoupon" method="post">
+                <div class="col-7">
+                  <label for="inputNanme4" class="form-label" >Coupon Name</label>
+                  <input type="text" class="form-control" id="inputNanme4" name="couponname">
+                </div>
+                <div class="col-7">
+                  <label for="inputEmail4" class="form-label">Coupon Offer</label>
+                  <input type="number" class="form-control" id="inputEmail4" name="offer">
+                </div>
+                <br>
+                {{#if couponexist}}
+                <p style="color: red;">{{couponexist}}</p>
+                {{/if}}
+                <br>
+                
+                <div class="text-left">
+                  <button type="submit" class="btn btn-primary">Add Coupon</button>
+                </div>
+              </form><!-- Vertical Form -->
+              </main>

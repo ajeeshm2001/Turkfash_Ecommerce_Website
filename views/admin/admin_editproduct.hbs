@@ -1,0 +1,52 @@
+ <main id="main" class="main">
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mt-3">
+                <h2>Edit Product</h2>
+                <form action="/admin/editproduct/{{product._id}}" method="post" enctype="multipart/form-data">
+                    <label for="">Product Name</label>
+                    <input type="text" name="Name" class="form-control" value="{{product.Name}}">
+                    <br>
+                    <label for="">Description</label>
+                    <input type="text" name="Description" class="form-control" required value="{{product.Description}}">
+                    <br>
+                    <label for="">Category</label>
+                    <input type="text" name="Category" class="form-control" required value="{{product.Category}}">
+                    <br>
+                    <label for="">Size</label>
+                    <input type="text" name="Size" class="form-control" required value="{{product.Size}}">
+                    <br>
+                    <label for="">Price</label>
+                    <input type="text" name="Price" class="form-control" required value="{{product.NewPrice}}">
+                    <br>
+                    <label for="">Color</label>
+                    <input type="color" name="color" class="form-control" required value="{{product.color}}">
+                    <br>
+                    <label class="form-label" for="form3Example4cg">Image</label>
+                    <img src="/pictures/productimages/{{product.img.[0]}}" alt="" style="width: 100px; height: auto;" class="mb-4" id="imgView">
+                                        <img src="/pictures/productimages/{{product.img.[1]}}" alt="" style="width: 100px; height: auto;" class="mb-4" id="imgView">
+                                        <img src="/pictures/productimages/{{product.img.[2]}}" alt="" style="width: 100px; height: auto;" class="mb-4" id="imgView">
+                                        <img src="/pictures/productimages/{{product.img.[3]}}" alt="" style="width: 100px; height: auto;" class="mb-4" id="imgView">
+
+                
+                    <input type="file" id="form3Example4cg" class="form-control form-control" multiple name="file" onchange="viewImage(event)" accept="image/apng, image/avif, image/gif, image/jpeg, image/png, image/svg+xml, image/webp"/>
+                    
+                 
+                  
+                    <button type="submit" class="btn btn-success mt-3">Update</button>
+                    {{!-- <input type="hidden" value="{{product._id}}"> --}}
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+
+<script>
+    function viewImage(event){
+        document.getElementById('imgView').src=URL.createObjectURL(event.target.files[0])
+    }
+   
+</script>

@@ -1,0 +1,49 @@
+ <main id="main" class="main">
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mt-3">
+                <h2>Add Banner</h2>
+                <form action="/admin/addbanner" method="post" enctype="multipart/form-data">
+                    <label for="">Sub Title</label>
+                    <input type="text" name="subtitle" class="form-control">
+                    <br>
+                    <label for="">Intro Title</label>
+                    <input type="text" name="introtitle" class="form-control">
+                    <br>
+                    <label for="">Intro Text 1</label>
+                    <input type="text" name="introtitle1" class="form-control">
+                    <br>
+                    <label for="">Intro Text 2</label>
+                    <input type="text" name="introtitle2" class="form-control">
+                    <br>
+                    <label class="form-label" for="form3Example4cg">Image</label>
+                    <img src="" id="uploadImage" alt="" >
+         
+
+                    <input type="file" id="uploadPreview" class="form-control form-control" name="file" onchange="PreviewImage()" accept="image/apng, image/avif, image/gif, image/jpeg, image/png, image/svg+xml, image/webp" />
+                 
+                  
+                    <button type="submit" class="btn btn-success mt-3">Add Banner</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+  {{!-- <script>
+     function PreviewImage() {
+        console.log('hello')
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("uploadImage").file);
+
+        oFReader.onload = function (oFREvent) {
+            console.log('haiiii')
+            document.getElementById("uploadPreview").src = oFREvent.target.result;
+        };
+    };
+
+</script> --}}
+</main>

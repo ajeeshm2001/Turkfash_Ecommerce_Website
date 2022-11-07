@@ -1,0 +1,3 @@
+GET http://localhost:7000/hello
+###
+GET http://localhost:7000/search

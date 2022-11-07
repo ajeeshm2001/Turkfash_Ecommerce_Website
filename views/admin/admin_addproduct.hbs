@@ -1,0 +1,77 @@
+ <main id="main" class="main">
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mt-3">
+                <h2>Add Product</h2>
+                <form action="/admin/addproduct" method="post" enctype="multipart/form-data">
+                    <label for="">Product Name</label>
+                    <input type="text" name="Name" class="form-control">
+                    <br>
+                    <label for="">Description</label>
+                    <input type="text" name="Description" class="form-control" required>
+                    <br>
+                    <label for="">Category</label>
+                    
+                     <select name="Category" id="cars">
+                        <option value="">Choose One Category</option>
+                        {{#each cat}}
+    <option value="{{this.Name}}">{{this.Name}}</option>
+    {{/each}}
+  </select>
+  
+                    <br>
+                    <br>
+                    <label for="">Size</label>
+                    <input type="text" name="Size" class="form-control" required>
+                    <br>
+                    <label for="">New Price</label>
+                    <input type="text" name="NewPrice" class="form-control" required>
+                    <br>
+                    <label for="">Color</label>
+                    <input type="color" name="color" class="form-control" required>
+                    <br>
+                    <label for="">Stock</label>
+                    <input type="number" name="stock" class="form-control" required>
+                    <br>
+                    <label class="form-label" for="form3Example4cg">Image</label>
+                    <br>
+                    <img id="uploadPreview" style="width: 100px; height: auto;" />
+                    <img id="uploadPreview1" style="width: 100px; height: auto;" />
+                    <img id="uploadPreview2" style="width: 100px; height: auto;" />
+                    <img id="uploadPreview3" style="width: 100px; height: auto;" />
+
+
+
+                    <br>
+
+                    <input type="file" id="uploadImage" class="form-control form-control" name="file" multiple accept="image/apng, image/avif, image/gif, image/jpeg, image/png, image/svg+xml, image/webp" onchange="PreviewImage()"/>
+                 
+                  
+                    <button type="submit" class="btn btn-success mt-3">Add Product</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+
+    function PreviewImage() {
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("uploadImage").files[0]);
+
+        oFReader.onload = function (oFREvent) {
+            document.getElementById("uploadPreview").src = oFREvent.target.result;
+                        document.getElementById("uploadPreview1").src = oFREvent.target.result;
+                                    document.getElementById("uploadPreview2").src = oFREvent.target.result;
+                                                document.getElementById("uploadPreview3").src = oFREvent.target.result;
+
+
+
+        };
+    };
+
+</script>
+
+</main>

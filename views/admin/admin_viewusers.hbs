@@ -1,0 +1,77 @@
+<main id="main" class="main">
+  <section>
+    <div class="container">
+      <table class="table table-striped" id="myTable">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Password</th>
+             <th scope="col">Block</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+          <tr>
+            
+            <th scope="row">{{inc @index}}</th>
+            <td>{{this.name}}</td>
+            <td>{{this.email}}</td>
+            <td>******</td>
+             <td>
+              {{#if userstatus}}
+                <button onclick="userblock('{{this._id}}')" class="btn btn-danger">BLOCK</button>
+                {{else}}
+                <button onclick="userunblock('{{this._id}}')" class="btn btn-success">UNBLOCK</button>
+
+                 {{/if}}
+                  
+
+
+                </td>
+               
+            {{!-- <td><img src="/product-images/{{this._id}}.jpg" alt="" style="width:50px ;"></td> --}}
+           
+          </tr>
+           {{/each}}
+
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<script>
+  $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+
+function userblock(userId){
+  $.ajax({
+    url:'/admin/blockuser/'+userId,
+    method:'put',
+    success:(response)=>{
+      location.reload()
+            {{!-- document.getElementById(userId).style.display="none"
+
+      document.getElementById("un"+userId).style.display="block" --}}
+    }
+  })
+}
+
+function userunblock(userId){
+  $.ajax({
+    url:'/admin/unblockuser/'+userId,
+    method:'put',
+    success:(response)=>{
+      location.reload()
+      {{!-- document.getElementById("un"+userId).style.display="none"
+
+      document.getElementById(userId).style.display="block" --}}
+    }
+  })
+}
+
+
+</script>
