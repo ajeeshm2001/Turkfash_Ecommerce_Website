@@ -785,7 +785,7 @@ module.exports = {
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_HELPERS).find({
                 Name:{
-                        $regex:value
+                        $regex:'.*'+value+'.*',$options:'i'
                 }
             }).toArray().then((response)=>{
                 console.log(response);
