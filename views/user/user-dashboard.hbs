@@ -227,7 +227,7 @@
                                         aria-labelledby="tab-downloads-link">
                                         <h5>Refferal Code </h5>
                                         <input type="text" value="{{user.referral}}" id="myInput" disabled>
-                                        <button onclick="myFunction()" class="btn btn-primary">Copy text</button>
+                                        <button onclick="copy()" class="btn btn-primary">Copy text</button>
                                         <br>
                                         <div>
                                             <h3 class="mt-3">Wallet Balance : <span>{{wallets}}</span></h3>
@@ -1049,22 +1049,10 @@
         }
 
 
-        function myFunction() {
-            // Get the text field
-            var copyText = document.getElementById("myInput");
+         
+            
 
-            // Select the text field
-            copyText.select();
-            copyText.setSelectionRange(0, 99999); // For mobile devices
-
-            // Copy the text inside the text field
-            navigator.clipboard.writeText(copyText.value);
-
-            // Alert the copied text
-            swal("Copied the text", copyText.value, "success");
-
-
-        }
+        
 
 
     </script>
@@ -1102,6 +1090,22 @@
                         document.getElementById('hide').style.display='none'
 
             document.getElementById('show').style.display='block'
+
+        }
+        function copy() {
+            // Get the text field
+            var copyText = document.getElementById("myInput");
+
+            // Select the text field
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the text inside the text field
+            navigator.clipboard.writeText(copyText.value);
+
+            // Alert the copied text
+
+                        swal("Copied the text", copyText.value, "success");
 
         }
     </script>

@@ -165,7 +165,7 @@
 
                                                     <tr class="summary-subtotal">
                                                         <td>Subtotal:</td>
-                                                        <td>{{total}}td>
+                                                        <td ><span id="subtotal">{{total}}</span><td>
                                                     </tr><!-- End .summary-subtotal -->
                                                     <tr>
                                                         <td>Shipping:</td>
@@ -725,12 +725,11 @@
                         document.getElementById('couponapply').style.color = "green"
                         document.getElementById('couponapply').innerHTML = response.message
                         let total = document.getElementById('total').innerHTML
-                        console.log(total)
+                        let subtotal = document.getElementById('subtotal').innerHTML
                         let offer = response.couponoffer
-                        console.log(offer)
-                        let v = total * (offer / 100)
+                        let v = subtotal * (offer / 100)
                         console.log(v)
-                        document.getElementById('total').innerHTML = total - v
+                        document.getElementById('total').innerHTML = Math.round(subtotal - v) 
                     } else {
                         document.getElementById('couponapply').style.color = "red"
                         document.getElementById('couponapply').innerHTML = response.message

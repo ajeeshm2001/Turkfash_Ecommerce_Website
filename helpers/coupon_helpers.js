@@ -44,9 +44,9 @@ module.exports={
                     response.status=false
                     resolve(response)
                 }else{
-                    db.get().collection(collection.COUPON_COLLECTION).updateOne({couponname:coupon.coupon},{
-                        $push:{users:userId}
-                    })
+                    // db.get().collection(collection.COUPON_COLLECTION).updateOne({couponname:coupon.coupon},{
+                    //     $push:{users:userId}
+                    // })
                     response.couponoffer=couponname.offer
                     response.message="Coupon Applied"
                     response.status=true
@@ -65,6 +65,15 @@ module.exports={
             db.get().collection(collection.COUPON_COLLECTION).find().toArray().then((response)=>{
                 console.log(response);
                 resolve(response)
+            })
+        })
+    },
+    userCouponPush:(coupon,userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).updateOne({couponname:coupon},{
+                $push:{users:userId}
+            }).then(()=>{
+                resolve()
             })
         })
     }

@@ -8,10 +8,14 @@ const { CART_HELPERS } = require("../config/collection");
 
 
 module.exports.userPlaceOrder= async (req, res) => {
+  
     let getallcoupon = await coupon_helpers.getAllcoupon()
     let address = await userhelpers.getAllAddress(req.session.user._id)
     let cartproducts = await userhelpers.getCartproducts(req.session.user._id);
     let total = await userhelpers.getTotalAmount(req.session.user._id);
+    if(req.body.coupon){
+
+    }
     if(cartproducts.length!=0){
       res.render("user/user-placeorder", {
         users:true,
@@ -27,12 +31,19 @@ module.exports.userPlaceOrder= async (req, res) => {
 
 
   module.exports.userPlaceOrderPost=async (req, res) => {
+    console.log('result..................');
+    console.log(req.body);
     let products = await userhelpers.getCartproductdetails(req.session.user._id);               
     let totalAmount = await userhelpers.getTotalAmount(req.session.user._id,req.body.coupon);
+    if(req.body.coupon){
+      let coupon =await coupon_helpers.userCouponPush(req.body.coupon,req.session.user._id)
+    }
     userhelpers.placeOrder(req.body, products, totalAmount).then((orderId) => {
       if (req.body["paymentmethod"] == "COD") {
         res.json({ codPayment: true });
       } else if (req.body.paymentmethod == "Razorpay") {
+        console.log('...........................ddddddddddddddddddddddddd');
+        console.log(totalAmount);
         userhelpers.generateRazorpay(orderId, totalAmount).then((response) => {
           res.json(response);
         });

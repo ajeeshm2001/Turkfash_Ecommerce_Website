@@ -67,7 +67,6 @@ module.exports={
         return new Promise(async(resolve,reject)=>{
             let b = parseInt(product.productOffer)
            let products  = await db.get().collection(collection.PRODUCT_HELPERS).findOne({_id:objectid(product.productId)})
-           console.log(products);
            let offer = products.NewPrice-(products.NewPrice*(b/100))
            offer = Math.round(offer)
             db.get().collection(collection.PRODUCT_HELPERS).updateOne({_id:objectid(product.productId)},{$set:{productoffer:parseInt(product.productOffer),NewPrice:offer,OldPrice:parseInt(products.NewPrice)}

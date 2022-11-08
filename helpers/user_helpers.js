@@ -478,17 +478,28 @@ module.exports = {
                     ])
                     .toArray();
                     let totals = total[0].total
-                    let usercoupon=await db.get().collection(collection.COUPON_COLLECTION).find({couponname:coupon,users:{$in:[userId]}}).toArray()
+                    console.log(userId,coupon);
+                    let usercoupon=await db.get().collection(collection.COUPON_COLLECTION).findOne({$and:[{couponname:coupon},{users:{$in:[userId.toString()]}}]})
+                    console.log('coupon.................................................');
+                    console.log(usercoupon);
                     
-                    
-                    if(usercoupon[0]){
-                        let coupondiscount=totals-(totals*(usercoupon[0].offer/100))
-                        coupondiscount=Math.round(coupondiscount)
+                    if(usercoupon){
+                        if(usercoupon.users!=null){
+                            resolve(total[0].total);
+
+                        }else{
+                            let coupondiscount=totals-(totals*(usercoupon.offer/100))
+                            coupondiscount=Math.round(coupondiscount)
                         resolve(coupondiscount)
 
-                    }else{
-                        resolve(total[0].total);
+                        }
+                       
+                        
 
+
+                    }else{
+                        
+                        resolve(total[0].total);
 
                     }
                 }
@@ -766,7 +777,7 @@ module.exports = {
     verifyPayment:(details)=>{
         return new Promise((resolve,reject)=>{
             const crypto = require('crypto');
-            let  hmac = crypto.createHmac('sha256', process.env.CRYPTO_HMAC);
+            let  hmac = crypto.createHmac('sha256', "6DdQss8Ib2YASbCW2ZvHrCYC");
             hmac.update(details['payment[razorpay_order_id]']+"|"+details['payment[razorpay_payment_id]'])
             hmac=hmac.digest('hex')
             if(hmac==details['payment[razorpay_signature]']){
