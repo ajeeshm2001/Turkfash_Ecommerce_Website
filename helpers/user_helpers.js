@@ -8,6 +8,7 @@ const objectid = require("mongodb").ObjectId;
 const Razorpay = require('razorpay');
 const { timeStamp } = require("console");
 const { rejects } = require("assert");
+const { Transaction } = require("mongodb");
 var instance = new Razorpay({
     key_id: process.env.RAZORPAY_KEYID,
     key_secret:process.env.RAZORPAY_SECRETKEY,
@@ -25,20 +26,57 @@ module.exports = {
                 if(userData.referral){
                     let referral =await  db.get().collection(collection.USER_HELPERS).findOne({referral:userData.referral})
                     if(referral){
-                        // walletObj={
-                        //     credit:100,
-                        //     debit:0,
-                        // }
+                        let transaction={
+                            credit:100,
+                            debit:0,
+                            
+                            date:new Date()
+                        }
+                        let wallet =await db.get().collection(collection.WALLET_COLLECTION).findOne({user:referral._id})
+                        if(wallet){
+                            let hello  = wallet.balance+100
+                            db.get().collection(collection.WALLET_COLLECTION).updateOne({user:referral._id},
+                                {
+                                    $set:{
+                                        balance:hello
+                                        
+                                            
+                                        
+                                    },
+                                    $push:{
+                                        transaction:transaction
+                                    }
+                                }
+                                ,)
+                        }else{
+                            let wallet ={
+                                user:referral._id,
+                                balance:100,
+                                transaction:[transaction]
+                            }
+                            db.get().collection(collection.WALLET_COLLECTION).insertOne(wallet)
+
+                        }
                         // let wallet=[walletObj]
-                         let wallet = referral.wallet+100
-                        db.get().collection(collection.USER_HELPERS).updateOne({_id:referral._id},{$set:{wallet:wallet}})
+                        //  let wallet = referral.wallet+100
+                        // db.get().collection(collection.USER_HELPERS).updateOne({_id:referral._id},{$push:{wallet:walletObj}})
                         userData.password = await bcrypt.hash(userData.password, 10);
                     userData.referral=shortid.generate()
-                    // let wallets={
+                    let transactions={
+                        credit:50,
+                        debit:0,
+                        date:new Date()
+                    }
+                    
+                    
+                    // let rwallet={
                     //     credit:50,
                     //     debit:0,
+                    //     date:new Date(),
+                    //     newbalance:50
                     // }
-                    userData.wallet = 50
+                    // userData.wallet=[rwallet]
+                    // userData.wallet = 50
                     // userdatawallet=[wallets]
                     // userData.wallet=userdatawallet
                     userData.userstatus = true;
@@ -48,8 +86,17 @@ module.exports = {
                         .then((data) => {
                             response.data=data
                             response.status=true
+                            db.get().collection(collection.USER_HELPERS).findOne({email:userData.email}).then((data)=>{
+                                let wallet ={
+                                    user:data._id,
+                                    balance:50,
+                                    transaction:[transactions]
+                                }
+                                db.get().collection(collection.WALLET_COLLECTION).insertOne(wallet)
+                            })
                             resolve(response);
                         });
+                        
                     }else{
                         response.message="Referral Code Doesn't Exist"
                         response.status=false
@@ -61,13 +108,22 @@ module.exports = {
                     userData.password = await bcrypt.hash(userData.password, 10);
                 userData.referral=shortid.generate()
                 userData.userstatus = true;
-                userData.wallet=0
                 db.get()
                     .collection(collection.USER_HELPERS)
                     .insertOne(userData)
                     .then((data) => {
+                        
                         response.data=data
                         response.status=true
+                        db.get().collection(collection.USER_HELPERS).findOne({email:userData.email}).then((data)=>{
+                            let wallet ={
+                                user:data._id,
+                                balance:0,
+                                transaction:[]
+                            }
+                            db.get().collection(collection.WALLET_COLLECTION).insertOne(wallet)
+                        })
+                       
                         resolve(response);
                     });
                 }
@@ -796,10 +852,22 @@ module.exports = {
     walletbalance:(userId,totalAmount)=>{
         return new Promise(async(resolve,reject)=>{
             let response={}
-            let user =await db.get().collection(collection.USER_HELPERS).findOne({_id:objectid(userId)})
-            if(totalAmount <= user.wallet){
-                userwallet = user.wallet - totalAmount
-                db.get().collection(collection.USER_HELPERS).updateOne({_id:objectid(userId)},{$set:{wallet:userwallet}})
+            let user = await db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(userId)})
+            // let user =await db.get().collection(collection.USER_HELPERS).findOne({_id:objectid(userId)})
+            if(totalAmount <= user.balance){
+                let userwallet = user.balance - totalAmount
+                
+                let transaction={
+                    credit:0,
+                    debit:totalAmount,
+                    
+                    date:new Date()
+                }
+                db.get().collection(collection.WALLET_COLLECTION).updateOne({user:objectid(userId)},{$set:{balance:userwallet},
+                $push:{
+                    transaction:transaction
+                }
+            })
                 response.status=true
                 response.wallet=true
                 resolve(response)
@@ -846,6 +914,36 @@ module.exports = {
             console.log('.irde. ............');
             console.log(orderproducts);
             resolve(orderproducts)
+        })
+    },
+    getUserWallet:(userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.WALLET_COLLECTION).aggregate([
+                {
+                    $match:{
+                        user:objectid(userId)
+                    }
+                },
+                {
+                    $project:{
+                        _id:1,
+                        user:1,
+                        balance:1,
+                        transaction:1
+                    }
+                },
+                {
+                    $unwind:'$transaction'
+                },{
+                    $sort:{'transaction.date':-1}
+                }
+            ]).toArray().then((data)=>{
+                console.log(data);
+                resolve(data)
+            })
+            // db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(userId)}).sort({transaction:{date:-1}}).then((data)=>{
+            //     resolve(data)
+            // })
         })
     }
 };

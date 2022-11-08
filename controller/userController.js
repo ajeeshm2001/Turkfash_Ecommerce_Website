@@ -182,11 +182,11 @@ module.exports.userViewCategory=(req, res) => {
 
 module.exports.userDashboard=async (req, res) => {
   let address = await userhelpers.getAllAddress(req.session.user._id)
+  let wallet = await userhelpers.getUserWallet(req.session.user._id)
+  let wallets = wallet[0].balance
   console.log(address);
   userhelpers.getallOrders(req.session.user._id).then((orders) => {
-    console.log('...............');
-    console.log(orders);
-    res.render("user/user-dashboard", { users:true,user: req.session.user, orders,address});
+    res.render("user/user-dashboard", { users:true,user: req.session.user, orders,address,wallet,wallets});
   });
 }
 
