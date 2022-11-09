@@ -479,18 +479,30 @@ module.exports = {
                     .toArray();
                     let totals = total[0].total
                     console.log(userId,coupon);
+                    let usercoupons = await db.get().collection(collection.COUPON_COLLECTION).findOne({couponname:coupon})
                     let usercoupon=await db.get().collection(collection.COUPON_COLLECTION).findOne({$and:[{couponname:coupon},{users:{$in:[userId.toString()]}}]})
                     console.log('coupon.................................................');
                     console.log(usercoupon);
-                    
-                    if(usercoupon){
-                        if(usercoupon.users!=null){
-                            resolve(total[0].total);
+                    console.log(usercoupon);
+                    if(usercoupons){
+                        if(usercoupon==null){
+                            if(usercoupons.offer>40){
+                                let coupondiscount=totals-(totals*(40/100))
+                                coupondiscount=Math.round(coupondiscount)
+                                
+                            resolve(coupondiscount)
+                            }else{
+                                let coupondiscount=totals-(totals*(usercoupons.offer/100))
+                                coupondiscount=Math.round(coupondiscount)
+                                
+                            resolve(coupondiscount)
+                            }
+                            
 
                         }else{
-                            let coupondiscount=totals-(totals*(usercoupon.offer/100))
-                            coupondiscount=Math.round(coupondiscount)
-                        resolve(coupondiscount)
+                            console.log('hi');
+                           
+                                                        resolve(total[0].total);
 
                         }
                        
@@ -499,6 +511,7 @@ module.exports = {
 
                     }else{
                         
+                        console.log('hoooooooo');
                         resolve(total[0].total);
 
                     }

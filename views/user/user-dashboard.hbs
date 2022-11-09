@@ -284,7 +284,7 @@
                                                             <a href="#signin-modaladdress1" data-toggle="modal">Edit <i
                                                                     class="icon-edit"></i></a>
                                                             <button class="float-right btn-primary"
-                                                                onclick="deleted('{{this._id}}')">Delete</button>
+                                                                onclick="deletede('{{this._id}}')">Delete</button>
 
                                                             {{!-- <a href="" class="float-right"><i
                                                                     class="bi bi-trash3-fill"></i></a> --}}
@@ -1026,7 +1026,7 @@
             })
         })
 
-        function deleted(addressId) {
+        function deletede(addressId) {
             console.log(addressId)
             $.ajax({
                 url: '/deleteaddress/' + addressId,
@@ -1034,13 +1034,10 @@
                 success: (response) => {
                     swal("", "Address Deleted!", "success").then(() => {
                         {
-                            {
-                                !--window.location.reload(true);
-                                history.go(0);
-                                window.location.href = window.location.href; --}
-                        }
-                        location.reload()
+                           location.reload()
                         location.href = '#tab-address'
+                        }
+                        
 
                     })
 

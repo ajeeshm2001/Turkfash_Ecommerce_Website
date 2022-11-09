@@ -68,6 +68,8 @@
         success:(response)=>{
           if(response.status){
       document.getElementById(proId).innerHTML=""
+          }else{
+            swal("", "There is no product offer for this product", "warning");
           }
         }
       })

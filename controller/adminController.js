@@ -143,7 +143,7 @@ const admin={
 
 
   module.exports.adminDeleteProductOffer=(req,res)=>{
-    producthelpers.deleteProductOffer(req.body.productid).then(()=>{
-      res.json({status:true})
+    producthelpers.deleteProductOffer(req.body.productid).then((response)=>{
+      res.json(response)
     })
   }

@@ -271,6 +271,12 @@
                         <td id="top">$5,828</td>
                       </tr>
                       {{/each}}
+                      <script>
+                        let price = document.getElementById('newprice').innerHTML
+                        let count = document.getElementById('count').innerHTML
+                         document.getElementById('top').innerHTML= parseInt(price)*parseInt(count)
+                        
+                      </script>
                       {{!-- <tr>
                         <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
                         <td><a href="#" class="text-primary fw-bold">Exercitationem similique doloremque</a></td>

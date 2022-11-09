@@ -92,7 +92,7 @@
 
                                 <div class="col-lg-8 d-flex justify-content-start">
 
-                                    <div class="justify-content-start">
+                                    <div class="">
 
                                         <h3>Choose Your Address</h3>
                                         <p>Please select your Address</p>
@@ -722,14 +722,24 @@
                 data: { 'coupon': value },
                 success: (response) => {
                     if (response.status === true) {
-                        document.getElementById('couponapply').style.color = "green"
+                        if(response.couponoffer>40){
+                            document.getElementById('couponapply').style.color = "green"
+                        document.getElementById('couponapply').innerHTML = response.message
+                        let total = document.getElementById('total').innerHTML
+                        let subtotal = document.getElementById('subtotal').innerHTML
+                        let offer = 40
+                        let v = subtotal * (offer / 100)
+                        document.getElementById('total').innerHTML = Math.round(subtotal - v) 
+                        }else{
+                            document.getElementById('couponapply').style.color = "green"
                         document.getElementById('couponapply').innerHTML = response.message
                         let total = document.getElementById('total').innerHTML
                         let subtotal = document.getElementById('subtotal').innerHTML
                         let offer = response.couponoffer
                         let v = subtotal * (offer / 100)
-                        console.log(v)
                         document.getElementById('total').innerHTML = Math.round(subtotal - v) 
+                        }
+                        
                     } else {
                         document.getElementById('couponapply').style.color = "red"
                         document.getElementById('couponapply').innerHTML = response.message

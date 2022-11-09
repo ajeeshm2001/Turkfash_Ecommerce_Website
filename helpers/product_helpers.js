@@ -67,25 +67,48 @@ module.exports={
         return new Promise(async(resolve,reject)=>{
             let b = parseInt(product.productOffer)
            let products  = await db.get().collection(collection.PRODUCT_HELPERS).findOne({_id:objectid(product.productId)})
-           let offer = products.NewPrice-(products.NewPrice*(b/100))
-           offer = Math.round(offer)
-            db.get().collection(collection.PRODUCT_HELPERS).updateOne({_id:objectid(product.productId)},{$set:{productoffer:parseInt(product.productOffer),NewPrice:offer,OldPrice:parseInt(products.NewPrice)}
+           if(products.productoffer){
+            let offer = products.OldPrice-(products.OldPrice*(b/100))
+            offer = Math.round(offer)
+            console.log(offer);
+            db.get().collection(collection.PRODUCT_HELPERS).updateOne({_id:objectid(product.productId)},{$set:{productoffer:parseInt(product.productOffer),NewPrice:parseInt(offer),OldPrice:parseInt(products.OldPrice)}
         
         }).then(()=>{
             
            resolve()
         })
+           }else{
+            let offer = products.NewPrice-(products.NewPrice*(b/100))
+            offer = Math.round(offer)
+            console.log(offer);
+            db.get().collection(collection.PRODUCT_HELPERS).updateOne({_id:objectid(product.productId)},{$set:{productoffer:parseInt(product.productOffer),NewPrice:parseInt(offer),OldPrice:parseInt(products.NewPrice)}
+        
+        }).then(()=>{
+            
+           resolve()
+        })
+           }
+          
+            
     })},
     deleteProductOffer:(proId)=>{
+        let response={}
         return new Promise(async(resolve,reject)=>{
             let product =await db.get().collection(collection.PRODUCT_HELPERS).findOne({_id:objectid(proId)})
-            db.get().collection(collection.PRODUCT_HELPERS).updateMany({_id:objectid(proId)},
+            if(product.productoffer){
+                db.get().collection(collection.PRODUCT_HELPERS).updateMany({_id:objectid(proId)},
             {
                 $set:{NewPrice:product.OldPrice},
                 $unset:{OldPrice:1,productoffer:1}
             }).then(()=>{
-                resolve()
+                response.status=true
+                resolve(response)
             })
+            }else{
+                response.status=false
+                resolve(response)
+            }
+            
         })
     }
     // offerManagement:()=>{

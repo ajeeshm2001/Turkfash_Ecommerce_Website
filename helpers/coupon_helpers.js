@@ -37,7 +37,7 @@ module.exports={
            if(couponname){
             
                 let usercoupon = await db.get().collection(collection.COUPON_COLLECTION).find({couponname:coupon.coupon,users:{$in:[userId]}}).toArray()
-                console.log('...........................');
+            
                 console.log(usercoupon);
                 if(usercoupon[0]){
                     response.message="Coupon Already Applied"
