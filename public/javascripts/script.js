@@ -35,6 +35,7 @@ function addTowishlist(proId){
         method:'get',
         success:(response)=>{
             if(response.status){
+                document.getElementById(proId).style.display='block'
                 let count=$('#wishlist-count').html()
                 count=parseInt(count)+1
                 $('#wishlist-count').html(count)
@@ -48,10 +49,23 @@ function addTocartwishlist(proId){
         url:'/addTocartwishlist/'+proId,
         method:'get',
         success:(response)=>{
-            console.log(proId);
+            if(response.st){
+                console.log(proId);
             swal("", "Item Moved To Cart", "success").then(()=>{
-                location.reload()
+                $.ajax({
+                    url:'/removewishlist',
+                    data:{
+                        proId:proId
+                    },
+                    method:'delete',
+                    success:(response)=>{
+                        location.reload()
+
+                    }
+                })
             })
+            }
+            
              
             
             // document.getElementById('wishlist').style.display='none'
@@ -66,7 +80,7 @@ function removewishlist(wishId,proId){
         url:'/removewishlist/',
         data:{
             wishlist:wishId,
-            product:proId
+            proId:proId
         },
         method:'delete',
         success:(response)=>{

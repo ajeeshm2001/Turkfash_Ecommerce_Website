@@ -64,7 +64,12 @@ router.get("/wishlist", userSession,viewWishlist);
 router.get("/addTocartwishlist/:id", userSession,addProductToCartWishlist);
 
 /*...  DELETE WISHLIST PRODUCT ...*/
-router.delete("/removewishlist",);
+router.delete("/removewishlist",(req,res)=>{
+  userhelpers.deleteWishlist(req.body.proId,req.session.user._id).then(()=>{
+    res.json({status:true})
+  })
+  
+});
 
 /*...  USER ADD PRODUCT TO CART ...*/
 router.get("/addtocart/:id",userSession,addToCart);

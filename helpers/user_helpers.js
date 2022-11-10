@@ -211,9 +211,7 @@ module.exports = {
     addTocart: (productId, userId) => {
         return new Promise(async (resolve, reject) => {
             let product=await db.get().collection(collection.PRODUCT_HELPERS).findOne({_id:objectid(productId)})
-            console.log(product)
             let userid = objectid(userId);
-            console.log(userid);
             let prObject = {
                 item: objectid(productId),
                 quantity: 1,
@@ -236,7 +234,7 @@ module.exports = {
                         .collection(collection.CART_HELPERS)
                         .updateOne(
                             {
-                               
+                               user:objectid(userId),
                                 "products.item": objectid(productId),
                             },
                             {
@@ -245,12 +243,13 @@ module.exports = {
                             },
                             
                         )
-                        .then(() => {
-                            db.get().collection(collection.WISHLIST_COLLECTION).updateOne({user:objectid(userId)},
-                                {
-                                    $pull:{products:{item:objectid(productId)}}
-                                }
-                            );
+                        .then((response) => {
+                            
+                            // db.get().collection(collection.WISHLIST_COLLECTION).updateOne({user:objectid(userId)},
+                            //     {
+                            //         $pull:{products:{item:objectid(productId)}}
+                            //     }
+                            // );
                             resolve();
                         });
                 } else {
@@ -263,11 +262,11 @@ module.exports = {
                             }
                         )
                         .then((response) => {
-                            db.get().collection(collection.WISHLIST_COLLECTION).updateOne({user:objectid(userId)},
-                                {
-                                    $pull:{products:{item:objectid(productId)}}
-                                }
-                            );
+                            // db.get().collection(collection.WISHLIST_COLLECTION).updateOne({user:objectid(userId)},
+                            //     {
+                            //         $pull:{products:{item:objectid(productId)}}
+                            //     }
+                            // );
                             resolve();
                         });
                 }
@@ -280,11 +279,11 @@ module.exports = {
                     .collection(collection.CART_HELPERS)
                     .insertOne(cartobj)
                     .then((response) => {
-                        db.get().collection(collection.WISHLIST_COLLECTION).updateOne({user:objectid(userId)},
-                                {
-                                    $pull:{products:{item:objectid(productId)}}
-                                }
-                            );
+                        // db.get().collection(collection.WISHLIST_COLLECTION).updateOne({user:objectid(userId)},
+                        //         {
+                        //             $pull:{products:{item:objectid(productId)}}
+                        //         }
+                        //     );
                         resolve();
                     });
             }
@@ -968,6 +967,20 @@ module.exports = {
             // db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(userId)}).sort({transaction:{date:-1}}).then((data)=>{
             //     resolve(data)
             // })
+        })
+    },
+    deleteWishlist:(proId,userID)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.WISHLIST_COLLECTION).updateOne({user:objectid(userID)},{
+                $pull:{
+                    products:{item:objectid(proId)}
+                }
+            }).then((response)=>{
+                console.log('.........kkkkkkkkkkk');
+                console.log(response);
+                resolve()
+            })
+
         })
     }
 };

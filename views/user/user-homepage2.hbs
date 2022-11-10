@@ -508,7 +508,9 @@
                                                 {{else}}
                                                                                                     {{!-- <a href="/wishlist/{{this._id}}" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a> --}}
 
-                                                    <button onclick=addTowishlist('{{this._id}}') class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></button>
+                                                    <button onclick=addTowishlist('{{this._id}}') class="btn-product-icon btn-wishlist btn-expandable"><span id="">add to wishlist</span></button>
+                                                                                                        <button  class="btn-product-icon btn-wishlist btn-expandable" id="{{this._id}}" style="display: none;"><span >wishlisted</span></button>
+
 
 
                                                 {{/if}}

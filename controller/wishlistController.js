@@ -25,7 +25,7 @@ module.exports.viewWishlist=async (req, res) => {
 
   module.exports.addProductToCartWishlist= (req, res) => {
     userhelpers.addTocart(req.params.id, req.session.user._id).then(() => {
-      res.json({ status: true });
+      res.json({ st: true });
     });
   }
 
