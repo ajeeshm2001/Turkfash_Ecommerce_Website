@@ -4,6 +4,7 @@ var categoryhelpers = require("../helpers/category_helpers");
 var bannerhelpers = require("../helpers/banner_helpers");
 const coupon_helpers = require("../helpers/coupon_helpers");
 const { CART_HELPERS } = require("../config/collection");
+const { response } = require("../app");
 
 
 
@@ -47,7 +48,8 @@ module.exports.userPlaceOrder= async (req, res) => {
         });
       }
       else if(req.body['paymentmethod']=="wallet"){
-        userhelpers.walletbalance(req.session.user._id,totalAmount).then((response)=>{
+        
+        userhelpers.updateWallet(req.session.user._id,totalAmount).then((response)=>{
           res.json(response)
         })
       }

@@ -7,6 +7,7 @@ const { addToCart, viewCart, changeProductQuantity, deleteCartProduct, userCartC
 const { viewWishlist, addProductsToWishlist, addProductToCartWishlist, orderSuccess } = require("../controller/wishlistController");
 const { userPlaceOrder, userPlaceOrderPost } = require("../controller/orderController");
 const { razorpayPayment, paypalPayment, paypalPaymentSuccess } = require("../controller/paymentController");
+const { response } = require("../app");
 
 paypal.configure({
   mode: "sandbox", //sandbox or live
@@ -141,6 +142,37 @@ router.get('/vieworderproducts/:id',(req,res)=>{
 router.get('/returnproduct/:id',async(req,res)=>{
   let products= await userhelpers.getallorderproducts(req.params.id)
  res.render('user/user-returnitem',{order:req.params.id})
+})
+
+
+router.post('/retrypayment',(req,res)=>{
+  req.body.totalAmount=parseInt(req.body.totalAmount)
+  let orderId=req.body.order
+  let totalAmount=req.body.totalAmount
+  if(req.body.paymentmethod=="Razorpay"){
+    userhelpers.generateRazorpay(req.body.order,req.body.totalAmount).then((response)=>{
+      console.log('..........dddddddddd');
+      response.pay=true
+      res.json(response)
+    })
+  }else{
+    res.json({orderId,totalAmount,paypal:true})
+  }
+})
+
+
+router.post('/walletbalance',async(req,res)=>{
+  console.log("kkkkkkkkkkkkkkkkkkkkkkk");
+  let totalAmount = await userhelpers.getTotalAmount(req.session.user._id,req.body.coupon)
+  userhelpers.walletbalance(req.session.user._id,totalAmount).then((response)=>{
+    console.log(response);
+    console.log('///////////////////////////////////');
+    res.json(response)
+  })
+})
+
+router.get('/hi',(req,res)=>{
+  res.json(response)
 })
 
 

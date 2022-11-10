@@ -878,19 +878,7 @@ module.exports = {
             let user = await db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(userId)})
             // let user =await db.get().collection(collection.USER_HELPERS).findOne({_id:objectid(userId)})
             if(totalAmount <= user.balance){
-                let userwallet = user.balance - totalAmount
-                
-                let transaction={
-                    credit:0,
-                    debit:totalAmount,
-                    
-                    date:new Date()
-                }
-                db.get().collection(collection.WALLET_COLLECTION).updateOne({user:objectid(userId)},{$set:{balance:userwallet},
-                $push:{
-                    transaction:transaction
-                }
-            })
+              
                 response.status=true
                 response.wallet=true
                 resolve(response)
@@ -980,6 +968,31 @@ module.exports = {
                 console.log(response);
                 resolve()
             })
+
+        })
+    },
+    updateWallet:(userId,totalAmount)=>{
+        return new Promise(async(resolve,reject)=>{
+            let user=await db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(userId)})
+           
+
+            let userwallet = parseInt(user.balance) - parseInt(totalAmount)
+            
+                
+            let transaction={
+                credit:0,
+                debit:totalAmount,
+                
+                date:new Date()
+            }
+            db.get().collection(collection.WALLET_COLLECTION).updateOne({user:objectid(userId)},{$set:{balance:userwallet},
+            $push:{
+                transaction:transaction
+            }
+        }).then((response)=>{
+            response.wallet=true
+            resolve(response)
+        })
 
         })
     }

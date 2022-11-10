@@ -144,12 +144,15 @@
 
                                                 </div>
                                                 <div class="col-md-4 mt-5">
-                                                    <p>Click to view Products</p>
+                                                    
+                                                    {{#if (trackorder this.status)}}
+                                                    <button class="btn btn-warning mb-5" onclick="retrypayment('{{this._id}}','{{this.totalamount}}','{{this.paymentmethod}}')">Retry Payment</button>
+                                                    {{!-- <a href="/returnproduct/{{this._id}}"
+                                                        class="btn btn-warning mb-5">Retry Payment</a> --}}
+                                                    {{else}}
+                                                        <p>Click to view Products</p>
                                                     <a href="/vieworderproducts/{{this._id}}"
                                                         class="btn btn-success mb-5">View Products</a>
-                                                    {{#if (trackorder this.trackOrder)}}
-                                                    <a href="/returnproduct/{{this._id}}"
-                                                        class="btn btn-warning mb-5">Return Items</a>
                                                     {{/if}}
 
 
@@ -1104,6 +1107,26 @@
 
                         swal("Copied the text", copyText.value, "success");
 
+        }
+
+        function retrypayment(orderId,totalAmount,paymentmethod){
+            $.ajax({
+                url:'/retrypayment',
+                data:{
+                    order:orderId,
+                    totalAmount:totalAmount,
+                    paymentmethod:paymentmethod
+                },
+                method:'post',
+                success:(response)=>{
+                    if(response.pay){
+                        razorPayment(response)
+                    }else{
+                        paypalPayment(response)
+                    }
+
+                }
+            })
         }
     </script>
 

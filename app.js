@@ -56,7 +56,7 @@ handlebars.registerHelper("multiply",function(value1,value2){
   return value1*value2
 })
 handlebars.registerHelper("trackorder",function(value){
-  if(value=='Delivered')
+  if(value=='pending')
   return(value = true)
 })
 
