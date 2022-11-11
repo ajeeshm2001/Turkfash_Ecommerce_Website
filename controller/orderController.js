@@ -32,7 +32,7 @@ module.exports.userPlaceOrder= async (req, res) => {
 
 
   module.exports.userPlaceOrderPost=async (req, res) => {
-    let products = await userhelpers.getCartproductdetails(req.session.user._id);               
+    let products = await userhelpers.getCartproductdetails(req.session.user._id,req.body.coupon,req.params.total);               
     let totalAmount = await userhelpers.getTotalAmount(req.session.user._id,req.body.coupon);
     if(req.body.coupon){
       let coupon =await coupon_helpers.userCouponPush(req.body.coupon,req.session.user._id)
@@ -41,7 +41,6 @@ module.exports.userPlaceOrder= async (req, res) => {
       if (req.body["paymentmethod"] == "COD") {
         res.json({ codPayment: true });
       } else if (req.body.paymentmethod == "Razorpay") {
-        console.log('...........................ddddddddddddddddddddddddd');
         console.log(totalAmount);
         userhelpers.generateRazorpay(orderId, totalAmount).then((response) => {
           res.json(response);

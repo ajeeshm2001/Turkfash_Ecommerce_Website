@@ -32,12 +32,12 @@ defaultLayout:'layout',layoutDir:__dirname+'/views/layout/',partialsDir:__dirnam
 handlebars.registerHelper("inc",function(value,options){
   return(value)+1
 })
-handlebars.registerHelper("dispatch",function(value,options){
-  if(value == 'Dispatched')
+handlebars.registerHelper("productstatus",function(value,options){
+  if(value == 'Item Ready For Dispatch')
   return(value = true)
 })
-handlebars.registerHelper("delivered",function(value,options){
-  if(value == 'Delivered')
+handlebars.registerHelper("productstatus1",function(value,options){
+  if(value == 'Shipped')
   return(value = true)
 })
 handlebars.registerHelper("cancelled",function(value,options){

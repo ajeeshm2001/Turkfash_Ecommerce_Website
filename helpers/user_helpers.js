@@ -215,7 +215,8 @@ module.exports = {
             let prObject = {
                 item: objectid(productId),
                 quantity: 1,
-                amount:parseInt(product.NewPrice)
+                amount:parseInt(product.NewPrice),
+                status:"Item Ready For Dispatch"
             };
             let userCart = await db
                 .get()
@@ -491,6 +492,7 @@ module.exports = {
                                 
                             resolve(coupondiscount)
                             }else{
+                                
                                 let coupondiscount=totals-(totals*(usercoupons.offer/100))
                                 coupondiscount=Math.round(coupondiscount)
                                 
@@ -524,13 +526,48 @@ module.exports = {
             
         });
     },
-    getCartproductdetails: (userId) => {
+    getCartproductdetails: (userId,coupon,totals) => {
         return new Promise(async (resolve, reject) => {
             let cartitems = await db
                 .get()
                 .collection(collection.CART_HELPERS)
                 .findOne({ user: objectid(userId) });
                 console.log(cartitems);
+                let usercoupons = await db.get().collection(collection.COUPON_COLLECTION).findOne({couponname:coupon})
+                let usercoupon=await db.get().collection(collection.COUPON_COLLECTION).findOne({$and:[{couponname:coupon},{users:{$in:[userId.toString()]}}]})
+                if(usercoupons){
+                    if(usercoupon==null){
+                        if(usercoupons.offer>40){
+                            let couponamount = parseInt(totals*(40/100))
+                       
+                            let length = cartitems.products.length
+                            
+                            let discount = parseInt(couponamount/length)
+                            
+                            cartitems.products.forEach(element => {
+                                element.offerprice = parseInt((element.amount)-discount)
+                            });
+                            
+                        }else{
+                          
+                            let couponamount = parseInt(totals*(usercoupons.offer/100))
+                         
+                            let length = cartitems.products.length
+                           
+                            let discount = parseInt(couponamount/length)
+                            
+                            cartitems.products.forEach(element => {
+                                element.offerprice = parseInt((element.amount)-discount)
+                            });
+                            
+                        }
+                        
+
+                    }
+                }
+           
+            console.log('.......................');
+            console.log(cartitems);
             resolve(cartitems.products);
         });
     },
@@ -542,8 +579,10 @@ module.exports = {
             let status = order["paymentmethod"] === "COD" ? "Placed" : "pending";
             let trackOrder = 'Ordered'
             let datez = new Date()
+            let timez = datez.toLocaleTimeString('en-US')
             day =datez.getDate()
-            month =datez.getMonth()
+
+            month =datez.getMonth()+1
             year = datez.getFullYear()
             date = `${year}-${month}-${day}`
             let orderObj = {
@@ -564,7 +603,8 @@ module.exports = {
                 month:month,
                 year:year,
                 trackOrder:trackOrder,
-                time:datez
+                time:datez,
+                timez:timez
 
             };
             db.get()
@@ -729,8 +769,26 @@ module.exports = {
         })
     },
     getallorderlist:()=>{
-        return new Promise((resolve,reject)=>{
-            let orderlist=db.get().collection(collection.ORDER_COLLECTION).find().toArray()
+        return new Promise(async(resolve,reject)=>{
+            let orderlist=await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $unwind:'$products'
+                },
+                {
+                    $lookup:{
+                        from:collection.PRODUCT_HELPERS,
+                        localField:'products.item',
+                        foreignField:'_id',
+                        as:'productdetails'
+                    }
+                },
+                {
+                    $sort:{
+                        time:-1
+                    }
+                }
+            ]).toArray()
+            console.log('......./////////////////////');
             console.log(orderlist);
             resolve(orderlist)
         })

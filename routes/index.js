@@ -88,7 +88,7 @@ router.delete("/removeproduct",deleteCartProduct);
 router.get("/placeorder", userSession,userPlaceOrder);
 
 /*...  USER PLACE ORDER POST ...*/
-router.post("/placeorder",userPlaceOrderPost);
+router.post("/placeorder/:total",userPlaceOrderPost);
 
 /*...  USER DASHBOARD ...*/
 router.get("/dashboard", userSession,userDashboard);

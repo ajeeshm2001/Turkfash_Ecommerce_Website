@@ -29,6 +29,7 @@ $('#checkoutform').submit((e) => {
     e.preventDefault()
     let value = document.getElementById('couponvalue').value
     let b  = document.getElementById('walletz').checked
+    let subtotal = document.getElementById('subtotal').innerHTML
     console.log(b);
     if(b){
         
@@ -39,7 +40,7 @@ $('#checkoutform').submit((e) => {
             success:(response)=>{
                 if(response.status){
                     $.ajax({
-                        url: '/placeorder/',
+                        url: '/placeorder/'+subtotal,
                         method: 'post',
                         data: $('#checkoutform').serialize(),
                             
@@ -61,7 +62,7 @@ $('#checkoutform').submit((e) => {
                                 
                             }
                              else {
-                                console.log(response)
+                                
                                 razorPayment(response)
                             }
                         }
@@ -73,7 +74,7 @@ $('#checkoutform').submit((e) => {
         })
     }else{
         $.ajax({
-            url: '/placeorder/',
+            url: '/placeorder/'+subtotal,
             method: 'post',
             data: $('#checkoutform').serialize(),
                 
