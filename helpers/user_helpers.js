@@ -395,6 +395,11 @@ module.exports = {
                         },
                         {
                             $inc: { "products.$.quantity": count},
+                        },
+                        {
+                            $set:{
+                                'products.amount':'products.quantity'
+                            }
                         }
                     )
                     .then((response) => {
@@ -538,26 +543,31 @@ module.exports = {
                 if(usercoupons){
                     if(usercoupon==null){
                         if(usercoupons.offer>40){
+                            console.log(cartitems.products);
+                            console.log('././././././././././././././././/./././././/./././.');
+                            console.log(totals);
                             let couponamount = parseInt(totals*(40/100))
-                       
+                        
                             let length = cartitems.products.length
-                            
+                        
                             let discount = parseInt(couponamount/length)
                             
                             cartitems.products.forEach(element => {
-                                element.offerprice = parseInt((element.amount)-discount)
+                                element.offerprice = Math.ceil(element.amount-(element.amount*40/100))
                             });
                             
                         }else{
+                            
+                            console.log(cartitems.products.amount);
+                            
                           
-                            let couponamount = parseInt(totals*(usercoupons.offer/100))
-                         
+                            let couponamount = parseInt(cartitems.products.amount*(usercoupons.offer/100))
                             let length = cartitems.products.length
                            
                             let discount = parseInt(couponamount/length)
                             
                             cartitems.products.forEach(element => {
-                                element.offerprice = parseInt((element.amount)-discount)
+                                element.offerprice = Math.ceil(element.amount-(element.amount*usercoupons.offer/100))
                             });
                             
                         }
@@ -573,8 +583,12 @@ module.exports = {
     },
     placeOrder: (order, product, totalamount) => {
         return new Promise(async (resolve, reject) => {
-            console.log('.........$$$$........');
-            console.log(order, product, totalamount);
+            console.log('.........$$$$....dvccccccccccccccccccccccccccccccccccc....');
+            console.log(product);
+            product.forEach(element => {
+                element.amount = element.amount*element.quantity
+            });
+
             let address = await db.get().collection(collection.ADDRESS_COLLECTION).findOne({_id:objectid(order.deliverydetails)})
             let status = order["paymentmethod"] === "COD" ? "Placed" : "pending";
             let trackOrder = 'Ordered'
@@ -793,11 +807,17 @@ module.exports = {
             resolve(orderlist)
         })
     },
-    editorderlist:(value,id)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectid(id)},{$set:{trackOrder:value}}).then((response)=>{
-                resolve(response)
+    editorderlist:(value,orderId,proId)=>{
+        return new Promise(async(resolve,reject)=>{
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectid(orderId),'products.item':objectid(proId)},
+            {
+                $set:{
+                    'products.$.status':value
+                }
+            }).then((data)=>{
+                resolve(data)
             })
+
         })
     },
     getallorderproduct:(orderId)=>{
@@ -1052,6 +1072,150 @@ module.exports = {
             resolve(response)
         })
 
+        })
+    },
+    getUserOrderedProducts:(orderId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $match:{
+                        _id:objectid(orderId)
+                    }
+                },
+                {
+                    $unwind:'$products'
+                },
+                {
+                    $lookup:{
+                        from:collection.PRODUCT_HELPERS,
+                        localField:'products.item',
+                        foreignField:'_id',
+                        as:'productdetails'                    }
+                },
+                {
+                    $unwind:'$productdetails'
+                }
+            ]).toArray().then((data)=>{
+                resolve(data)
+            })
+        })
+    },
+    getUserReturnProduct:(orderId,proId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $match:{
+                        _id:objectid(orderId),
+                    }
+                },
+                {
+                    $unwind:'$products'
+                },
+                {
+                    $match:{
+                        'products.item':objectid(proId)
+
+                    }
+                },
+                {
+                    $lookup:{
+                        from:collection.PRODUCT_HELPERS,
+                        localField:'products.item',
+                        foreignField:'_id',
+                        as:'productdetails'
+                    }
+                },{
+                    $unwind:'$productdetails'              }
+            ]).toArray().then((data)=>{
+                resolve(data[0])
+            })
+        })
+    },
+    returnProduct:(details,userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            details.status="Return Requested"
+            details.orderId=objectid(details.orderId)
+            details.productID=objectid(details.productID)
+            details.user=objectid(userId)
+            details.time = new Date()
+            let product = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $match:{
+                        _id:objectid(details.orderId)
+                    }
+                },
+                {
+                    $unwind:'$products'
+                },
+                {
+                    $match:{
+                        'products.item':objectid(details.productID)
+                    }
+                },
+               {
+                $project:{
+                    products:1
+                }
+               }
+            ]).toArray()
+            // let product =await db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectid(details.orderId),'products.item':objectid(details.productID)})
+            console.log(product);
+            console.log('///////////................>>>>>>>');
+            
+            details.product=product[0].products
+            db.get().collection(collection.RETURN_COLLECTION).insertOne(details).then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+    updateReturnStatus:(orderId,proId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectid(orderId),'products.item':objectid(proId)},
+            {
+                $set:{
+                    'products.$.status':'Return Requested'
+                }
+            }
+            ).then((response)=>{
+                resolve()
+            })
+        })
+    },
+    approveReturn:(details)=>{
+        console.log(details);
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.RETURN_COLLECTION).updateOne({_id:objectid(details.return)},
+            {
+                $set:{
+                    'products.status':'Return Approved'
+                }
+            }
+            ).then(async(data)=>{
+                console.log(details.products);
+                let wallet = await db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(details.user)})
+                let newbalance = wallet.balance+parseInt(details.products)
+                console.log(wallet.balance);
+                console.log(newbalance);
+                console.log(details.products);
+                let transaction={
+                    credit:parseInt(details.products),
+                    debit:0,
+                    
+                    date:new Date()
+                }
+                db.get().collection(collection.WALLET_COLLECTION).updateOne({user:objectid(details.user)},{
+                    $set:{
+                            balance:newbalance
+                    },
+                    $push:{
+                        transaction:transaction
+                    }
+                }
+                )
+                    console.log('...........');
+                console.log(data);
+                resolve(data)
+            })
         })
     }
 };

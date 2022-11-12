@@ -2,62 +2,83 @@
   <section>
     <div class="container">
       <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Order</th>
-                    <th scope="col">Address Details</th>
-                    <th scope="col">Date and Time</th>
-                                        <th scope="col">Payment <br>Method</th>
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Order</th>
+            <th scope="col">Address Details</th>
+            <th scope="col">Date and Time</th>
+            <th scope="col">Payment <br>Method</th>
 
-                    <th scope="col">Amount Paid</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {{#each order}}
-                  <tr>
-                    <th scope="row">{{inc @ index}}</th>
-                    <th class="h6">Order id: <br>
-                      {{this._id}}<br>
-                      <br>
-                      Product Name:<br> {{this.productdetails.[0].Name}}<br>
-                      <br>
-                      Product Category:<br> {{this.productdetails.[0].Category}}</th>
-                      
-                    <td>Name:<br>{{this.deliveryDetails.name}}<br>
-                    {{this.deliveryDetails.address}}<br>
-                    Pincode:{{this.deliveryDetails.pincode}}</td>
-                    <td>Date : <br>{{this.date}}<br>
-                    <br>
-                    <br>
-                    Time:<br>{{this.timez}}</td>
-                    <td>{{this.paymentmethod}}</td>
-                    {{#if this.products.offerprice}}
-                    <td>₹{{this.products.offerprice}} /-</td>
-                    {{else}}
-                    <td>₹{{this.products.amount}} /-</td>
-                    {{/if}}
-                    <td>
-                      <select class="form-select" aria-label="Default select example">
-                          <option hidden>{{this.products.status}}</option>
+            <th scope="col">Amount Paid</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each order}}
+          <tr>
+          {{#if (productstatus3 this.products.status)}}
+          <tr class="text-danger">
+            {{/if}}
+            {{#if (productstatus2 this.products.status)}}
+          <tr class="text-success">
+            {{/if}}
+            <th scope="row">{{inc @ index}}</th>
+            <th class="h6">Order id: <br>
+              {{this._id}}<br>
+              <br>
+              Product Name:<br> {{this.productdetails.[0].Name}}<br>
+              <br>
+              Product Category:<br> {{this.productdetails.[0].Category}}
+            </th>
 
-  {{#if (productstatus  this.products.status)}}
-  <option value="" class="text-success">Shipped</option>
-    <option class="text-danger">Cancelled</option>
-  {{/if}}
-   {{#if (productstatus1  this.products.status)}}
-   <option value="" class="text-success">Delivered</option>
-    <option class="text-danger">Cancelled</option>
-    {{/if}}
-</select>
-                    <br><p>{{this.products.status}}</p>
-                    </td>
-                  </tr>
-                  
-                  {{/each}}
-                </tbody>
-              </table>
+            <td>Name:<br>{{this.deliveryDetails.name}}<br>
+              {{this.deliveryDetails.address}}<br>
+              Pincode:{{this.deliveryDetails.pincode}}</td>
+            <td>Date : <br>{{this.date}}<br>
+              <br>
+              <br>
+              Time:<br>{{this.timez}}
+            </td>
+            <td>{{this.paymentmethod}}</td>
+            {{#if this.products.offerprice}}
+            <td>₹{{this.products.offerprice}} /-</td>
+            {{else}}
+            <td>₹{{this.products.amount}} /-</td>
+            {{/if}}
+            <td>
+              <select id="{{this.products.item}}" class="form-select" aria-label="Default select example"
+                onchange="statusz(event,'{{this._id}}','{{this.products.item}}')">
+                {{#if (returnstatus this.product.returnstatus)}}
+                            <option hidden>{{this.products.status}}</option>
+{{/if}}
+                <option hidden>{{this.products.status}}</option>
+
+                {{#if (productstatus this.products.status)}}
+                <option class="text-success">Shipped</option>
+                <option class="text-danger">Cancelled</option>
+                {{/if}}
+                {{#if (productstatus1 this.products.status)}}
+                <option  class="text-success">Delivered</option>
+                <option class="text-danger">Cancelled</option>
+                {{/if}}
+                {{#if (productstatus2 this.products.status)}}
+                <option selected
+                disabled >Delivered</option>
+                {{/if}}
+                {{#if (productstatus3 this.products.status)}}
+                <option selected
+                disabled >Cancelled</option>
+                {{/if}}
+              </select>
+              <br>
+              <p>{{this.products.status}}</p>
+            </td>
+          </tr>
+
+          {{/each}}
+        </tbody>
+      </table>
       {{!-- <table class="table table-striped" id="myTable">
         <thead>
           <tr>
@@ -73,7 +94,7 @@
         <tbody>
           {{#each order}}
           <tr>
-            
+
             <th scope="row">{{inc @index}}</th>
             <td>{{this.deliveryDetails.name}}</td>
             <td>{{this._id}}</td>
@@ -91,19 +112,19 @@
             {{#if (cancelled this.trackOrder)}}
             <td style="color: red;">{{this.trackOrder}}</td>
             {{/if}}
-              {{#if (pending this.trackOrder)}}
+            {{#if (pending this.trackOrder)}}
             <td style="color: black;">{{this.trackOrder}}</td>
             {{/if}}
             <td>
-              
+
               <a href="/admin/editorder/Dispatched/{{this._id}}" class="btn btn-primary">Dispatched</a>
-              <a href="/admin/editorder/Delivered/{{this._id}}" class="btn btn-success" >Delivered</a>
+              <a href="/admin/editorder/Delivered/{{this._id}}" class="btn btn-success">Delivered</a>
               <a href="/admin/editorder/Cancelled/{{this._id}}" class="btn btn-danger">Cancel</a>
 
             </td>
-           
+
           </tr>
-           {{/each}}
+          {{/each}}
 
         </tbody>
       </table> --}}
@@ -111,9 +132,28 @@
   </section>
 </main>
 <script>
-  $(document).ready( function () {
+  $(document).ready(function () {
     $('#myTable').DataTable();
-} );
+  });
 
+
+  function statusz(e, orderId, proId) {
+    let value = e.target.value
+    $.ajax({
+      url: '/admin/editorder',
+      method: 'put',
+      data: {
+        value: value,
+        orderId: orderId,
+        proId: proId
+      },
+      success: (response) => {
+        swal("", "Status Changed To "+value, "success").then(()=>{
+          location.reload()
+        })
+      }
+    })
+
+  }
 
 </script>

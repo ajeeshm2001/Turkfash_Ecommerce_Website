@@ -40,30 +40,51 @@
                 </div><!-- End .container -->
             </div><!-- End .page-header -->
     {{#each orderproducts}}
-    <h5>{{this._id}}</h5>
 <div class="card text-center m-4 shadow-lg p-3 mb-5 bg-white rounded" style="">
   
   <div class="card-body d-flex">
     <div class="col-md-4">
             <div class="col-md-6 d-flex">
-<img src="/pictures/productimages/{{this.products.img.[3]}}" alt="" style="width: 100px;height: auto;" class="me-5">
-<img src="/pictures/productimages/{{this.products.img.[2]}}" alt="" style="width: 100px;height: auto;" class="me-5">
-<img src="/pictures/productimages/{{this.products.img.[1]}}" alt="" style="width: 100px;height: auto;" class="me-5">
-<img src="/pictures/productimages/{{this.products.img.[0]}}" alt="" style="width: 100px;height: auto;" class="me-5">
+<img src="/pictures/productimages/{{this.productdetails.img.[3]}}" alt="" style="width: 100px;height: auto;" class="me-5">
+<img src="/pictures/productimages/{{this.productdetails.img.[2]}}" alt="" style="width: 100px;height: auto;" class="me-5">
+<img src="/pictures/productimages/{{this.productdetails.img.[1]}}" alt="" style="width: 100px;height: auto;" class="me-5">
+<img src="/pictures/productimages/{{this.productdetails.img.[0]}}" alt="" style="width: 100px;height: auto;" class="me-5">
 
             </div>
 
     </div>
     <div class="col-md-4 mt-4">
-    <p>Quantity : {{this.quantity}}</p>
-    <span>Price : {{this.products.NewPrice}}</span>
+        
+    <p>Quantity : {{this.products.quantity}}</p>
+    {{#if this.products.offerprice}}
+    <span>Price : {{this.products.offerprice}}</span>
+    {{else}}
+    <span>Price : {{this.products.amount}}</span>
+    {{/if}}
     <br>
-    <span>Size : {{this.products.Size}}</span>
+    <span>Size : {{this.productdetails.Size}}</span>
+    
 
     </div>
-    <div class="col-md-4 mt-5">
-            
+    <div class="col-md-2 mt-4">
+      
+                                                          <span>Status : <br><b>{{this.products.status}}</b></span>
 
+                                 
+
+
+    </div>
+    <div class="col-md-2 mt-5">
+            
+        {{#if (productstatus2 this.products.status)}}
+        <a href="/returnorder/{{this._id}}/{{this.products.item}}" class="btn btn-success"  >Return Item</a>
+    {{/if}}
+    {{#if (productstatus this.products.status)}}
+        <button class="btn btn-danger">Cancel</button>
+    {{/if}}
+    {{#if (productstatus1 this.products.status)}}
+            <button class="btn btn-danger">Cancel</button>
+            {{/if}}
 
     </div>
       
@@ -72,9 +93,67 @@
   {{/each}}
 
   
+<div class="modal fade" id="returnitem" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="modalclose()">
+                        <span aria-hidden="true"><i class="icon-close"></i></span>
+                    </button>
 
+                    <div class="form-box">
+                        <div class="form-tab">
+                            <ul class="nav nav-pills nav-fill" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin"
+                                        role="tab" aria-controls="signin" aria-selected="true">RETURN ITEM</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="tab-content-5">
+                                <div class="tab-pane fade show active" id="signin" role="tabpanel"
+                                    aria-labelledby="signin-tab">
+                                    <form id="returnform">
+
+                                        <div class="form-group">
+                                            <label for="singin-email">Reason For Return</label>
+                                            <input type="text" class="form-control" name="returnreason"
+                                                required>
+                                        </div><!-- End .form-group -->
+
+                                        <div class="form-group">
+                                            <label for="singin-email">Reason Details</label>
+                                            <input type="text" class="form-control"  name="returndetails"
+                                                required>
+                                        </div><!-- End .form-group -->
+
+                                        <div class="form-group">
+                                            <label for="singin-password">Comments</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" ></textarea>
+
+                                        </div><!-- End .form-group -->
+                                        <p class="text-success" id="success"></p>
+                                        <p class="text-danger" id="danger"></p>
+
+                                        <div class="form-footer">
+                                            <button type="submit" class="btn btn-outline-primary-2 text-centre">
+                                                <span>SUBMIT</span>
+                                                <i class="icon-long-arrow-right"></i>
+                                            </button>
+                                        </div><!-- End .form-footer -->
+                                    </form>
+
+                                </div><!-- .End .tab-pane -->
+
+                            </div><!-- End .tab-content -->
+                        </div><!-- End .form-tab -->
+                    </div><!-- End .form-box -->
+                </div><!-- End .modal-body -->
+            </div><!-- End .modal-content -->
+        </div><!-- End .modal-dialog -->
+    </div><!-- End .modal -->
 
  
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- Plugins JS File -->
     <script src="/userassets/js/jquery.min.js"></script>

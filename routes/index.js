@@ -134,9 +134,14 @@ router.get("/getorderproduct/:id", async (req, res) => {
 
 
 router.get('/vieworderproducts/:id',(req,res)=>{
-  userhelpers.getallorderproducts(req.params.id).then((orderproducts)=>{
-    res.render('user/user-vieworderedproducts',{users:true,orderproducts})
+  console.log('ddddddddddddddjjjjjjjjjjjjjjjjjssssssssss');
+  userhelpers.getUserOrderedProducts(req.params.id).then((orderproducts)=>{
+        res.render('user/user-vieworderedproducts',{users:true,orderproducts})
+
   })
+  // userhelpers.getallorderproducts(req.params.id).then((orderproducts)=>{
+  //   res.render('user/user-vieworderedproducts',{users:true,orderproducts})
+  // })
 })
 
 router.get('/returnproduct/:id',async(req,res)=>{
@@ -173,6 +178,21 @@ router.post('/walletbalance',async(req,res)=>{
 
 router.get('/hi',(req,res)=>{
   res.json(response)
+})
+
+router.get('/returnorder/:orderId/:proId',(req,res)=>{
+  userhelpers.getUserReturnProduct(req.params.orderId,req.params.proId).then((returnproducts)=>{
+    console.log(returnproducts);
+    res.render('user/user-returnproduct',{users:true,returnproducts})
+  })
+})
+
+
+router.post('/returnproduct',async(req,res)=>{
+  userhelpers.returnProduct(req.body,req.session.user._id).then(async()=>{
+    let update=await userhelpers.updateReturnStatus(req.body.orderId,req.body.productID)
+    res.redirect('/dashboard')
+  })
 })
 
 

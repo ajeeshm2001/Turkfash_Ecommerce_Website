@@ -186,6 +186,7 @@ module.exports.userDashboard=async (req, res) => {
   let wallets = wallet[0].balance
   console.log(address);
   userhelpers.getallOrders(req.session.user._id).then((orders) => {
+    
     res.render("user/user-dashboard", { users:true,user: req.session.user, orders,address,wallet,wallets});
   });
 }

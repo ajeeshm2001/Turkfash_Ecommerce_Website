@@ -110,65 +110,45 @@ module.exports={
             }
             
         })
-    }
-    // offerManagement:()=>{
-    //     return new Promise((resolve,reject)=>{
-    //         db.get().collection(collection.PRODUCT_HELPERS).aggregate([
-    //             {
-    //                 $lookup:{
-    //                     from:collection.CATEGORY_HELPERS,
-    //                     foreignField:'Name',
-    //                     localField:'Category',
-    //                     as:'discount'
-    //                 }
-    //             },
-    //             {
-    //                 $unwind:'$discount'
-    //             },
-    //             {
-    //                 $addFields:{
-    //                     discount:{
-    //                         $cond:{
-    //                             if:{
-    //                                 $gt:[
-    //                                     '$productoffer','$discount.categoryoffer'
-    //                                 ]
-    //                             },then:'$productoffer',else:'$discount.categoryoffer'
-    //                         }
-    //                     }
-    //                 }
-    //             },
-    //             {
-    //                 $addFields:{
-    //                     discountAmount:{
-    //                         $round:{
-    //                             $divide:[
-    //                                 {
-    //                                     $multiply:['$NewPrice','$discount']
-    //                                 },100
-    //                             ]
-    //                         }
-    //                     }
-    //                 }
-    //             },
-    //             {
-    //                 $addFields:{
-    //                     priceafterDiscount:{
-    //                         $round:{
-    //                             $subtract:['$NewPrice','$discountAmount']
-    //                         }
-    //                     }
-    //                 }
-    //             },
+    },
+    viewAllReturn:()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.RETURN_COLLECTION).aggregate([
+                {
+                    $lookup:{
+                        from:collection.ORDER_COLLECTION,
+                        localField:'orderId',
+                        foreignField:'_id',
+                        as:'orderdetails'
+                    }
+                },
+                {
+                    $lookup:{
+                        from:collection.PRODUCT_HELPERS,
+                        localField:'productID',
+                        foreignField:'_id',
+                        as:'productdetails'
+                    }
+                },
+                {
+                    $unwind:'$orderdetails'
+                },
+        
+                {
+                    $unwind:'$productdetails'
+                },
+                {
+                    $sort:{
+                        time:-1
+                    }
+                }
                
-    //         ]).toArray().then((response)=>{
-    //             if(response.discount!=0){
-    //                 console.log("hello00000000000000000");
-    //             }
-    //             console.log(response);
-    //             resolve(response)
-    //         })
-    //     })
-    // }
+               
+            ]).toArray().then((response)=>{
+                console.log(response);
+                resolve(response)
+            })
+        })
+    }
 
 }

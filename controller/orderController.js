@@ -67,7 +67,9 @@ module.exports.userPlaceOrder= async (req, res) => {
 
 
   module.exports.adminEditOrder=(req,res)=>{
-    userhelpers.editorderlist(req.params.value,req.params.id).then((response)=>{
-      res.redirect('/admin/viewallorders')
+    console.log('///<<<<<<<>>>>>>>>>>>>>>>>>>');
+    console.log(req.body.value);
+    userhelpers.editorderlist(req.body.value,req.body.orderId,req.body.proId).then((response)=>{
+     res.json(response)
     })
   }

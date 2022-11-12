@@ -1,18 +1,85 @@
   <main id="main" class="main">
 
  <!-- Accordion without outline borders -->
-              <div class="accordion accordion-flush" id="accordionFlushExample">
+ {{#each orders}}
+              <div class="accordion accordion-flush" id="accordionFlushExample{{this._id}}">
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="flush-headingOne">
-                    <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                      Accordion Item #1
+                    <button id="{{this._id}}" class="accordion-button collapsed  border border-dark" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne{{this._id}}" aria-expanded="false" aria-controls="flush-collapseOne" onclick="accordian('{{this._id}}')">
+                      
                     </button>
                   </h2>
-                  <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+                  <div id="flush-collapseOne{{this._id}}" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body d-flex">
+
+                      <div class="col-md-4">
+                        <img src="/pictures/productimages/{{this.productdetails.img.[3]}}" alt="" style="width: 50%;">
+                      </div>
+                      <div class="col-md-4">
+                        <b>Delivered Address</b><br>
+
+                        <b>{{this.orderdetails.deliveryDetails.name}}</b><br>
+                        <b>{{this.orderdetails.deliveryDetails.address}}</b><br>
+                        <b>{{this.orderdetails.deliveryDetails.pincode}}</b>
+                        <br>
+
+                        <br>
+                        <b >Amount paid : ₹ 
+                          {{#if this.product.offerprice}}
+                          <span id="price">{{this.product.offerprice}}</span>
+                          {{else}}
+                          <span id="price">{{this.product.amount}}</span>
+                          {{/if}}
+                           /-</b>
+                        <br>
+                        <b>Quantity : {{this.product.quantity}}</b>
+                        <br>
+                        <b>Payment Method : {{this.orderdetails.paymentmethod}}</b>
+                        <br>
+                        <br>
+                         <b>Return Reason</b><br>
+                      <p for="">{{this.returnreason}}</p><br>
+                      <b>Reason Details</b><br>
+                      <p>{{this.reasondetails}}</p><br>
+                      <b>Comments</b><br>
+                      <p>{{this.comments}}</p>
+                       
+                       <button onclick="returnapprove('{{this.product.amount}}','{{this.productID}}','{{this.orderId}}','{{this.user}}','{{this._id}}')" class="btn btn-success">Approve Request</button>
+                      {{!-- <a href="/admin/updatereturn" class="btn btn-success">Approve Request</a> --}}
+                       
+                      </div>
+                      <div class="col-md-4"></div>
+                     
+                    </div>
                   </div>
                 </div>
                 
                 
               </div><!-- End Accordion without outline borders -->
+              {{/each}}
 </main>
+<script>
+  function accordian(Id){
+    console.log(Id)
+    document.getElementById(Id).style.backgroundColor="lightblue"
+  }
+
+  function returnapprove(products,orderId,proId,user,returnid){
+    let amount = document.getElementById('price').innerHTML
+    $.ajax({
+      url:'/admin/updatereturn',
+      method:'post',
+      data:{
+        products:amount,
+        orderId:orderId,
+        proId:proId,
+        user:user,
+        returnid:returnid
+      
+      },
+      success:(response)=>{
+
+      }
+    })
+  }
+</script>

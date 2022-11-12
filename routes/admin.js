@@ -9,6 +9,8 @@ const { adminAddBanner, adminAddBannerPost } = require('../controller/bannerCont
 const { adminViewOrder, adminEditOrder } = require('../controller/orderController');
 const { salesReport } = require('../controller/salesController');
 const { adminAddCoupon, adminAddCouponPost } = require('../controller/couponController');
+const product_helpers = require('../helpers/product_helpers');
+const user_helpers = require('../helpers/user_helpers');
 
 /*... ADMIN LOGIN ...*/
 router.route('/adminlogin').get(adminLogin).post(adminLoginPost)
@@ -68,7 +70,7 @@ router.post('/addbanner',upload2.any('file'),adminAddBannerPost)
 router.get('/viewallorders',adminViewOrder)
 
 /*... ADMIN EDIT ORDER...*/
-router.get('/editorder/:value/:id',adminEditOrder)
+router.put('/editorder',adminEditOrder)
 
 /*... ADMIN SALES REPORT ...*/
 router.get('/salesreport',salesReport)
@@ -104,7 +106,17 @@ router.put('/addcategoryoffer',(req,res)=>{
 
 
 router.get('/viewreturnorder',(req,res)=>{
-  res.render('admin/admin_returnorders',{admin:true})
+  product_helpers.viewAllReturn().then((orders)=>{
+    console.log(orders);
+    res.render('admin/admin_returnorders',{admin:true,orders})
+  })
+})
+
+
+router.post('/updatereturn',(req,res)=>{
+  user_helpers.approveReturn(req.body).then((data)=>{
+    res.redirect('/admin/viewreturnorder')
+  })
 })
   
 

@@ -40,16 +40,16 @@ handlebars.registerHelper("productstatus1",function(value,options){
   if(value == 'Shipped')
   return(value = true)
 })
-handlebars.registerHelper("cancelled",function(value,options){
+handlebars.registerHelper("productstatus2",function(value,options){
+  if(value == 'Delivered')
+  return(value = true)
+})
+handlebars.registerHelper("productstatus3",function(value,options){
   if(value == 'Cancelled')
   return(value = true)
 })
-handlebars.registerHelper("placed",function(value,options){
-  if(value == 'Placed')
-  return(value = true)
-})
-handlebars.registerHelper("pending",function(value,options){
-  if(value == 'pending')
+handlebars.registerHelper("returnstatus",function(value,options){
+  if(value == 'Return Requested')
   return(value = true)
 })
 handlebars.registerHelper("multiply",function(value1,value2){
