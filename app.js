@@ -52,6 +52,10 @@ handlebars.registerHelper("returnstatus",function(value,options){
   if(value == 'Return Requested')
   return(value = true)
 })
+handlebars.registerHelper("return",function(value,options){
+  if(value == 'Return Approved')
+  return(value = true)
+})
 handlebars.registerHelper("multiply",function(value1,value2){
   return value1*value2
 })

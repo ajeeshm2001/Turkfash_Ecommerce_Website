@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const categoryhelpers = require('../helpers/category_helpers')
 const {upload, upload2, upload3} = require('../public/javascripts/fileupload');
-const { adminLogin, adminLoginPost, adminPanel, adminViewProduct, adminAddProduct, adminAddProductPost, deleteProducts, editProductPage, editProduct, adminLogOut, productOffer, adminAddProductOffer, adminDeleteProductOffer } = require('../controller/adminController');
+const { adminLogin, adminLoginPost, adminPanel, adminViewProduct, adminAddProduct, adminAddProductPost, deleteProducts, editProductPage, editProduct, adminLogOut, productOffer, adminAddProductOffer, adminDeleteProductOffer, viewAllCategories, addCategoryProductOffer, viewAllReturnOrder, updateReturnOrder } = require('../controller/adminController');
 const { viewUsers, userBlock, userUnblock } = require('../controller/userController');
 const { addCategories, addCategoryPost, viewCategory, editCategory, editCategoryPost, deleteCategory } = require('../controller/categoryController');
 const { adminAddBanner, adminAddBannerPost } = require('../controller/bannerController');
@@ -88,36 +88,16 @@ router.put('/addoffer',adminAddProductOffer)
 router.delete('/deleteoffer',adminDeleteProductOffer)
 
 
+router.get('/categoryoffer',viewAllCategories)
 
 
-router.get('/categoryoffer',async(req,res)=>{
- let category = await categoryhelpers.getAllCategories()
-  res.render('admin/admin_categoryoffer',{admin:true,category})
-})
+router.put('/addcategoryoffer',addCategoryProductOffer)
 
 
-router.put('/addcategoryoffer',(req,res)=>{
-  console.log(req.body);
-  categoryhelpers.addCategoryOffer(req.body).then(()=>{
-    res.json({status:true})
-  })
-})
+router.get('/viewreturnorder',viewAllReturnOrder)
 
 
-
-router.get('/viewreturnorder',(req,res)=>{
-  product_helpers.viewAllReturn().then((orders)=>{
-    console.log(orders);
-    res.render('admin/admin_returnorders',{admin:true,orders})
-  })
-})
-
-
-router.post('/updatereturn',(req,res)=>{
-  user_helpers.approveReturn(req.body).then((data)=>{
-    res.redirect('/admin/viewreturnorder')
-  })
-})
+router.post('/updatereturn',updateReturnOrder)
   
 
 router.get('/select',(req,res)=>{

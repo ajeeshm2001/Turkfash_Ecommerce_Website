@@ -68,7 +68,7 @@
     </div>
     <div class="col-md-2 mt-4">
       
-                                                          <span>Status : <br><b>{{this.products.status}}</b></span>
+                                                          <span>Status : <br><b class="text-danger">{{this.products.status}}</b></span>
 
                                  
 
@@ -80,7 +80,7 @@
         <a href="/returnorder/{{this._id}}/{{this.products.item}}" class="btn btn-success"  >Return Item</a>
     {{/if}}
     {{#if (productstatus this.products.status)}}
-        <button class="btn btn-danger">Cancel</button>
+        <button class="btn btn-danger" onclick="cancelorder('{{this._id}}','{{this.products.item}}')">Cancel</button>
     {{/if}}
     {{#if (productstatus1 this.products.status)}}
             <button class="btn btn-danger">Cancel</button>
@@ -153,6 +153,48 @@
     </div><!-- End .modal -->
 
  
+ <script>
+    function cancelorder(orderId,proId){
+        const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
+
+swalWithBootstrapButtons.fire({
+  title: 'Are you sure?',
+  text: "",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Yes, cancel it!',
+  cancelButtonText: 'No',
+  reverseButtons: true
+}).then((result) => {
+  if (result.isConfirmed) {
+    $.ajax({
+            url:'/cancelorder',
+            data:{
+                orderId:orderId,
+                proId:proId
+            },
+            method:'post',
+            success:(response)=>{
+                location.reload()
+            }
+        })
+  } else if (
+    /* Read more about handling dismissals below */
+    result.dismiss === Swal.DismissReason.cancel
+  ) {
+    
+  }
+})
+
+        
+    }
+ </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- Plugins JS File -->

@@ -5,8 +5,8 @@ const { userLoginPage, userSignUpPage, userSignUpPagePost, userLoginPagePost, us
 const paypal = require("paypal-rest-sdk");
 const { addToCart, viewCart, changeProductQuantity, deleteCartProduct, userCartCount } = require("../controller/cartController");
 const { viewWishlist, addProductsToWishlist, addProductToCartWishlist, orderSuccess } = require("../controller/wishlistController");
-const { userPlaceOrder, userPlaceOrderPost } = require("../controller/orderController");
-const { razorpayPayment, paypalPayment, paypalPaymentSuccess } = require("../controller/paymentController");
+const { userPlaceOrder, userPlaceOrderPost, getOrderProduct, viewOrderProduct, returnProducts, returnOrderProduct, returnOrderProductPost, cancelOrderedProduct } = require("../controller/orderController");
+const { razorpayPayment, paypalPayment, paypalPaymentSuccess, retryPayment, walletBalance } = require("../controller/paymentController");
 const { response } = require("../app");
 
 paypal.configure({
@@ -126,74 +126,33 @@ router.get('/countcart',userCartCount)
 /*...  USER ORDER SUCCESS PAGE ...*/
 router.get('/ordersuccess',orderSuccess)
 
-router.get("/getorderproduct/:id", async (req, res) => {
-  let orderproduct = await userhelpers.getallorderproduct(req.params.id);
-  res.json(orderproduct);
-}); 
+
+router.get("/getorderproduct/:id",getOrderProduct); 
 
 
-
-router.get('/vieworderproducts/:id',(req,res)=>{
-  console.log('ddddddddddddddjjjjjjjjjjjjjjjjjssssssssss');
-  userhelpers.getUserOrderedProducts(req.params.id).then((orderproducts)=>{
-        res.render('user/user-vieworderedproducts',{users:true,orderproducts})
-
-  })
-  // userhelpers.getallorderproducts(req.params.id).then((orderproducts)=>{
-  //   res.render('user/user-vieworderedproducts',{users:true,orderproducts})
-  // })
-})
-
-router.get('/returnproduct/:id',async(req,res)=>{
-  let products= await userhelpers.getallorderproducts(req.params.id)
- res.render('user/user-returnitem',{order:req.params.id})
-})
+router.get('/vieworderproducts/:id',viewOrderProduct)
 
 
-router.post('/retrypayment',(req,res)=>{
-  req.body.totalAmount=parseInt(req.body.totalAmount)
-  let orderId=req.body.order
-  let totalAmount=req.body.totalAmount
-  if(req.body.paymentmethod=="Razorpay"){
-    userhelpers.generateRazorpay(req.body.order,req.body.totalAmount).then((response)=>{
-      console.log('..........dddddddddd');
-      response.pay=true
-      res.json(response)
-    })
-  }else{
-    res.json({orderId,totalAmount,paypal:true})
-  }
-})
+router.get('/returnproduct/:id',returnProducts)
 
 
-router.post('/walletbalance',async(req,res)=>{
-  console.log("kkkkkkkkkkkkkkkkkkkkkkk");
-  let totalAmount = await userhelpers.getTotalAmount(req.session.user._id,req.body.coupon)
-  userhelpers.walletbalance(req.session.user._id,totalAmount).then((response)=>{
-    console.log(response);
-    console.log('///////////////////////////////////');
-    res.json(response)
-  })
-})
+router.post('/retrypayment',retryPayment)
+
+
+router.post('/walletbalance',walletBalance)
+
+
+router.get('/returnorder/:orderId/:proId',returnOrderProduct)
+
+
+router.post('/returnproduct',returnOrderProductPost)
+
+
+router.post('/cancelorder',userSession,cancelOrderedProduct)
+
 
 router.get('/hi',(req,res)=>{
   res.json(response)
 })
-
-router.get('/returnorder/:orderId/:proId',(req,res)=>{
-  userhelpers.getUserReturnProduct(req.params.orderId,req.params.proId).then((returnproducts)=>{
-    console.log(returnproducts);
-    res.render('user/user-returnproduct',{users:true,returnproducts})
-  })
-})
-
-
-router.post('/returnproduct',async(req,res)=>{
-  userhelpers.returnProduct(req.body,req.session.user._id).then(async()=>{
-    let update=await userhelpers.updateReturnStatus(req.body.orderId,req.body.productID)
-    res.redirect('/dashboard')
-  })
-})
-
 
 module.exports = router;

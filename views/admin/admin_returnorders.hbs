@@ -2,11 +2,14 @@
 
  <!-- Accordion without outline borders -->
  {{#each orders}}
+  {{#if (return this.status)}}
+
+  {{else}}
               <div class="accordion accordion-flush" id="accordionFlushExample{{this._id}}">
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="flush-headingOne">
-                    <button id="{{this._id}}" class="accordion-button collapsed  border border-dark" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne{{this._id}}" aria-expanded="false" aria-controls="flush-collapseOne" onclick="accordian('{{this._id}}')">
-                      
+                    <button id="{{this._id}}" class="accordion-button collapsed  btn-rounded" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne{{this._id}}" aria-expanded="false" aria-controls="flush-collapseOne" onclick="accordian('{{this._id}}')">
+                      Return : {{this._id}}
                     </button>
                   </h2>
                   <div id="flush-collapseOne{{this._id}}" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
@@ -56,6 +59,7 @@
                 
                 
               </div><!-- End Accordion without outline borders -->
+              {{/if}}
               {{/each}}
 </main>
 <script>
@@ -64,7 +68,7 @@
     document.getElementById(Id).style.backgroundColor="lightblue"
   }
 
-  function returnapprove(products,orderId,proId,user,returnid){
+  function returnapprove(products,proId,orderId,user,returnid){
     let amount = document.getElementById('price').innerHTML
     $.ajax({
       url:'/admin/updatereturn',
@@ -78,7 +82,15 @@
       
       },
       success:(response)=>{
-
+        Swal.fire({
+  position: 'center',
+  icon: 'success',
+  title: 'Return has been Aproved',
+  showConfirmButton: false,
+  timer: 1500
+}).then(()=>{
+  location.reload()
+})
       }
     })
   }

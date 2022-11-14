@@ -109,3 +109,25 @@ paypal.configure({
       }
   });
   }
+
+
+  module.exports.retryPayment=(req,res)=>{
+    req.body.totalAmount=parseInt(req.body.totalAmount)
+    let orderId=req.body.order
+    let totalAmount=req.body.totalAmount
+    if(req.body.paymentmethod=="Razorpay"){
+      userhelpers.generateRazorpay(req.body.order,req.body.totalAmount).then((response)=>{
+        response.pay=true
+        res.json(response)
+      })
+    }else{
+      res.json({orderId,totalAmount,paypal:true})
+    }
+  }
+
+  module.exports.walletBalance=async(req,res)=>{
+    let totalAmount = await userhelpers.getTotalAmount(req.session.user._id,req.body.coupon)
+    userhelpers.walletbalance(req.session.user._id,totalAmount).then((response)=>{
+      res.json(response)
+    })
+  }

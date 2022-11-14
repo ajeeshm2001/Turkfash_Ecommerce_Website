@@ -32,7 +32,9 @@ module.exports.userPlaceOrder= async (req, res) => {
 
 
   module.exports.userPlaceOrderPost=async (req, res) => {
-    let products = await userhelpers.getCartproductdetails(req.session.user._id,req.body.coupon,req.params.total);               
+    let products = await userhelpers.getCartproductdetails(req.session.user._id,req.body.coupon,req.params.total); 
+    console.log(products);
+    console.log('..............................,,/yhhhhhhhhhh');              
     let totalAmount = await userhelpers.getTotalAmount(req.session.user._id,req.body.coupon);
     if(req.body.coupon){
       let coupon =await coupon_helpers.userCouponPush(req.body.coupon,req.session.user._id)
@@ -71,5 +73,46 @@ module.exports.userPlaceOrder= async (req, res) => {
     console.log(req.body.value);
     userhelpers.editorderlist(req.body.value,req.body.orderId,req.body.proId).then((response)=>{
      res.json(response)
+    })
+  }
+
+
+  module.exports.getOrderProduct= async (req, res) => {
+    let orderproduct = await userhelpers.getallorderproduct(req.params.id);
+    res.json(orderproduct);
+  }
+
+
+  module.exports.viewOrderProduct=(req,res)=>{
+    userhelpers.getUserOrderedProducts(req.params.id).then((orderproducts)=>{
+          res.render('user/user-vieworderedproducts',{users:true,orderproducts})
+    })
+  }
+
+
+  module.exports.returnProducts=async(req,res)=>{
+    let products= await userhelpers.getallorderproducts(req.params.id)
+   res.render('user/user-returnitem',{order:req.params.id})
+  }
+
+  module.exports.returnOrderProduct=(req,res)=>{
+    userhelpers.getUserReturnProduct(req.params.orderId,req.params.proId).then((returnproducts)=>{
+      console.log(returnproducts);
+      res.render('user/user-returnproduct',{users:true,returnproducts})
+    })
+  }
+
+
+  module.exports.returnOrderProductPost=async(req,res)=>{
+    userhelpers.returnProduct(req.body,req.session.user._id).then(async()=>{
+      let update=await userhelpers.updateReturnStatus(req.body.orderId,req.body.productID)
+      res.redirect('/dashboard')
+    })
+  }
+
+
+  module.exports.cancelOrderedProduct=(req,res)=>{
+    userhelpers.cancelOrder(req.body.orderId,req.body.proId,req.session.user._id).then((response)=>{
+      res.json(response)
     })
   }

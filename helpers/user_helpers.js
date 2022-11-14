@@ -543,31 +543,21 @@ module.exports = {
                 if(usercoupons){
                     if(usercoupon==null){
                         if(usercoupons.offer>40){
-                            console.log(cartitems.products);
-                            console.log('././././././././././././././././/./././././/./././.');
-                            console.log(totals);
-                            let couponamount = parseInt(totals*(40/100))
-                        
-                            let length = cartitems.products.length
-                        
-                            let discount = parseInt(couponamount/length)
-                            
                             cartitems.products.forEach(element => {
-                                element.offerprice = Math.ceil(element.amount-(element.amount*40/100))
+                                element.quantityprice=element.amount*element.quantity
+                            });
+
+                            cartitems.products.forEach(element => {
+                                element.offerprice = Math.ceil(element.quantityprice-(element.quantityprice*40/100))
                             });
                             
                         }else{
-                            
-                            console.log(cartitems.products.amount);
-                            
-                          
-                            let couponamount = parseInt(cartitems.products.amount*(usercoupons.offer/100))
-                            let length = cartitems.products.length
-                           
-                            let discount = parseInt(couponamount/length)
+                            cartitems.products.forEach(element => {
+                                element.quantityprice=element.amount*element.quantity
+                            });
                             
                             cartitems.products.forEach(element => {
-                                element.offerprice = Math.ceil(element.amount-(element.amount*usercoupons.offer/100))
+                                element.offerprice = Math.ceil(element.quantityprice-(element.quantityprice*usercoupons.offer/100))
                             });
                             
                         }
@@ -576,18 +566,24 @@ module.exports = {
                     }
                 }
            
-            console.log('.......................');
-            console.log(cartitems);
             resolve(cartitems.products);
         });
     },
     placeOrder: (order, product, totalamount) => {
         return new Promise(async (resolve, reject) => {
-            console.log('.........$$$$....dvccccccccccccccccccccccccccccccccccc....');
-            console.log(product);
             product.forEach(element => {
                 element.amount = element.amount*element.quantity
             });
+
+            product.forEach(async(element)=>{
+                let product = await db.get().collection(collection.PRODUCT_HELPERS).findOne({_id:element.item})
+                db.get().collection(collection.PRODUCT_HELPERS).updateOne({_id:element.item},
+                    {
+                        $set:{
+                            stock:product.stock-element.quantity
+                        }
+                    })
+            })
 
             let address = await db.get().collection(collection.ADDRESS_COLLECTION).findOne({_id:objectid(order.deliverydetails)})
             let status = order["paymentmethod"] === "COD" ? "Placed" : "pending";
@@ -1184,13 +1180,21 @@ module.exports = {
     approveReturn:(details)=>{
         console.log(details);
         return new Promise((resolve,reject)=>{
-            db.get().collection(collection.RETURN_COLLECTION).updateOne({_id:objectid(details.return)},
+            db.get().collection(collection.RETURN_COLLECTION).updateOne({_id:objectid(details.returnid)},
             {
                 $set:{
-                    'products.status':'Return Approved'
+                    status:'Return Approved'
                 }
             }
             ).then(async(data)=>{
+               let b= await db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectid(details.orderId),'products.item':objectid(details.proId)},
+                {
+                    $set:{
+                        'products.$.status':'Return Approved'
+                    }
+                }
+                )
+                console.log(b);
                 console.log(details.products);
                 let wallet = await db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(details.user)})
                 let newbalance = wallet.balance+parseInt(details.products)
@@ -1214,6 +1218,66 @@ module.exports = {
                 )
                     console.log('...........');
                 console.log(data);
+                resolve(data)
+            })
+        })
+    },
+    cancelOrder:(orderId,proId,userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectid(orderId)})
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectid(orderId),'products.item':objectid(proId)},
+            {
+                $set:{
+                    'products.$.status':'Cancelled'
+                }
+            }).then(async(data)=>{
+                if(order.paymentmethod!='COD'){
+                    let pro = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                        {
+                            $match:{
+                                _id:objectid(orderId)
+                            }
+                        },
+                        {
+                            $unwind:'$products'
+                        },
+                        {
+                            $match:{
+                                'products.item':objectid(proId)
+                            }
+                        }
+                    ]).toArray()
+                    console.log(pro[0]);
+                    let amount
+                    console.log(pro[0].products.amount);
+                    if(pro[0].products.offerprice){
+                        amount=pro[0].products.offerprice
+                    }else{
+                        amount=pro[0].products.amount
+                    }
+                    console.log('////////......................><><><><><><>');
+                    console.log(amount);
+                    let transaction={
+                        credit:amount,
+                        debit:0,
+                        
+                        date:new Date()
+                    }
+                    let wallet = await db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(userId)})
+
+                    let balance = wallet.balance+amount
+                    db.get().collection(collection.WALLET_COLLECTION).updateOne({user:objectid(userId)},
+                    {
+                        $set:{
+                            balance:balance
+                        },
+                        $push:{
+                            transaction:transaction
+                        }
+                    }
+                    
+                    )
+                }
                 resolve(data)
             })
         })

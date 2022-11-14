@@ -2,6 +2,8 @@ const saleshelpers = require('../helpers/sales_helpers');
 const sales_helpers = require('../helpers/sales_helpers');
 var producthelpers = require('../helpers/product_helpers')
 const categoryhelpers = require('../helpers/category_helpers')
+const product_helpers = require('../helpers/product_helpers')
+const user_helpers = require('../helpers/user_helpers')
 let ad
 
 const admin={
@@ -145,5 +147,31 @@ const admin={
   module.exports.adminDeleteProductOffer=(req,res)=>{
     producthelpers.deleteProductOffer(req.body.productid).then((response)=>{
       res.json(response)
+    })
+  }
+
+
+  module.exports.viewAllCategories=async(req,res)=>{
+    let category = await categoryhelpers.getAllCategories()
+     res.render('admin/admin_categoryoffer',{admin:true,category})
+   }
+
+   module.exports.addCategoryProductOffer=(req,res)=>{
+    console.log(req.body);
+    categoryhelpers.addCategoryOffer(req.body).then(()=>{
+      res.json({status:true})
+    })
+  }
+
+  module.exports.viewAllReturnOrder=(req,res)=>{
+    product_helpers.viewAllReturn().then((orders)=>{
+      res.render('admin/admin_returnorders',{admin:true,orders})
+    })
+  }
+
+
+  module.exports.updateReturnOrder=(req,res)=>{
+    user_helpers.approveReturn(req.body).then((data)=>{
+      res.json(data)
     })
   }
