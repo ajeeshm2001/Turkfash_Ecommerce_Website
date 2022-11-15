@@ -17,7 +17,7 @@
         <tbody>
           {{#each order}}
           <tr>
-          {{#if (productstatus3 this.products.status)}}
+            {{#if (productstatus3 this.products.status)}}
           <tr class="text-danger">
             {{/if}}
             {{#if (productstatus2 this.products.status)}}
@@ -50,8 +50,8 @@
               <select id="{{this.products.item}}" class="form-select" aria-label="Default select example"
                 onchange="statusz(event,'{{this._id}}','{{this.products.item}}')">
                 {{#if (returnstatus this.product.returnstatus)}}
-                            <option hidden>{{this.products.status}}</option>
-{{/if}}
+                <option hidden>{{this.products.status}}</option>
+                {{/if}}
                 <option hidden>{{this.products.status}}</option>
 
                 {{#if (productstatus this.products.status)}}
@@ -59,16 +59,14 @@
                 <option class="text-danger">Cancelled</option>
                 {{/if}}
                 {{#if (productstatus1 this.products.status)}}
-                <option  class="text-success">Delivered</option>
+                <option class="text-success">Delivered</option>
                 <option class="text-danger">Cancelled</option>
                 {{/if}}
                 {{#if (productstatus2 this.products.status)}}
-                <option selected
-                disabled >Delivered</option>
+                <option selected disabled>Delivered</option>
                 {{/if}}
                 {{#if (productstatus3 this.products.status)}}
-                <option selected
-                disabled >Cancelled</option>
+                <option selected disabled>Cancelled</option>
                 {{/if}}
               </select>
               <br>
@@ -148,7 +146,7 @@
         proId: proId
       },
       success: (response) => {
-        swal("", "Status Changed To "+value, "success").then(()=>{
+        swal("", "Status Changed To " + value, "success").then(() => {
           location.reload()
         })
       }

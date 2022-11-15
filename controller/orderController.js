@@ -34,7 +34,6 @@ module.exports.userPlaceOrder= async (req, res) => {
   module.exports.userPlaceOrderPost=async (req, res) => {
     let products = await userhelpers.getCartproductdetails(req.session.user._id,req.body.coupon,req.params.total); 
     console.log(products);
-    console.log('..............................,,/yhhhhhhhhhh');              
     let totalAmount = await userhelpers.getTotalAmount(req.session.user._id,req.body.coupon);
     if(req.body.coupon){
       let coupon =await coupon_helpers.userCouponPush(req.body.coupon,req.session.user._id)
