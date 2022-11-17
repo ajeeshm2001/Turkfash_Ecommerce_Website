@@ -33,6 +33,7 @@ module.exports.addToCart= (req, res) => {
       total,
       user: req.session.user,
       carttotal,
+      userheadz:true
     });
   }
 

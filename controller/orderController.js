@@ -23,7 +23,8 @@ module.exports.userPlaceOrder= async (req, res) => {
         cartproducts,
         total,
         user: req.session.user,
-        address,getallcoupon
+        address,getallcoupon,
+        userheadz:true
       });
     }else{
       res.redirect('/')

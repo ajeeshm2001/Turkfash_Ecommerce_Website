@@ -43,6 +43,7 @@ module.exports.userHomepage= async function (req, res, next) {
         cartCount,
         banner,
         wishlistCount,
+        
       });
     });
   });
@@ -168,14 +169,14 @@ module.exports.userProductDetails=async (req, res) => {
   let product = await producthelpers.getProductdetail(req.params.id);
   producthelpers.getAllProductsCa(product.Category).then((cate) => {
     let user = req.session.user;
-    res.render("user/user-product", {users:true, product, user, cate });
+    res.render("user/user-product", {users:true, product, user, cate ,userheadz:true});
   });
 }
 
 
 module.exports.userViewCategory=(req, res) => {
   producthelpers.getAllProductsCa(req.params.id).then((cate) => {
-    res.render("user/user-viewcategory", {users:true, cate });
+    res.render("user/user-viewcategory", {users:true, cate ,userheadz:true});
   });
 }
 
@@ -194,7 +195,7 @@ module.exports.userDashboard=async (req, res) => {
   console.log(address);
   userhelpers.getallOrders(req.session.user._id).then((orders) => {
     
-    res.render("user/user-dashboard", { users:true,user: req.session.user, orders,address,wallet,wallets});
+    res.render("user/user-dashboard", { users:true,user: req.session.user, orders,address,wallet,wallets,userheadz:true});
   });
 }
 
