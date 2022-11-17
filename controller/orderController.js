@@ -85,7 +85,7 @@ module.exports.userPlaceOrder= async (req, res) => {
 
   module.exports.viewOrderProduct=(req,res)=>{
     userhelpers.getUserOrderedProducts(req.params.id).then((orderproducts)=>{
-          res.render('user/user-vieworderedproducts',{users:true,orderproducts})
+          res.render('user/user-vieworderedproducts',{users:true,orderproducts,userheadz:true})
     })
   }
 
