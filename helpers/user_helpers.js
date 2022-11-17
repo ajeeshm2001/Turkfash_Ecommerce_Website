@@ -86,13 +86,14 @@ module.exports = {
                         .then((data) => {
                             response.data=data
                             response.status=true
-                            db.get().collection(collection.USER_HELPERS).findOne({email:userData.email}).then((data)=>{
+                            db.get().collection(collection.USER_HELPERS).findOne({email:userData.email}).then(async(data)=>{
                                 let wallet ={
                                     user:data._id,
                                     balance:50,
                                     transaction:[transactions]
                                 }
                                 db.get().collection(collection.WALLET_COLLECTION).insertOne(wallet)
+                                
                             })
                             resolve(response);
                         });
@@ -115,13 +116,16 @@ module.exports = {
                         
                         response.data=data
                         response.status=true
-                        db.get().collection(collection.USER_HELPERS).findOne({email:userData.email}).then((data)=>{
+                        db.get().collection(collection.USER_HELPERS).findOne({email:userData.email}).then(async(data)=>{
                             let wallet ={
                                 user:data._id,
                                 balance:0,
                                 transaction:[]
                             }
-                            db.get().collection(collection.WALLET_COLLECTION).insertOne(wallet)
+                            console.log(wallet);
+                            let b = await db.get().collection(collection.WALLET_COLLECTION).insertOne(wallet)
+                            console.log('////////////...........,,,,,,,,,,');
+                            console.log(b);
                         })
                        
                         resolve(response);
@@ -1002,30 +1006,33 @@ module.exports = {
         })
     },
     getUserWallet:(userId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.WALLET_COLLECTION).aggregate([
-                {
-                    $match:{
-                        user:objectid(userId)
+        return new Promise(async(resolve,reject)=>{
+            
+                db.get().collection(collection.WALLET_COLLECTION).aggregate([
+                    {
+                        $match:{
+                            user:objectid(userId)
+                        }
+                    },
+                    {
+                        $project:{
+                            _id:1,
+                            user:1,
+                            balance:1,
+                            transaction:1
+                        }
+                    },
+                    {
+                        $unwind:'$transaction'
+                    },{
+                        $sort:{'transaction.date':-1}
                     }
-                },
-                {
-                    $project:{
-                        _id:1,
-                        user:1,
-                        balance:1,
-                        transaction:1
-                    }
-                },
-                {
-                    $unwind:'$transaction'
-                },{
-                    $sort:{'transaction.date':-1}
-                }
-            ]).toArray().then((data)=>{
-                console.log(data);
-                resolve(data)
-            })
+                ]).toArray().then((data)=>{
+                    console.log(data);
+                    resolve(data)
+                })
+            
+            
             // db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(userId)}).sort({transaction:{date:-1}}).then((data)=>{
             //     resolve(data)
             // })
