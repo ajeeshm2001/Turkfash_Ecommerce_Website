@@ -3,7 +3,8 @@ const sales_helpers = require('../helpers/sales_helpers');
 var producthelpers = require('../helpers/product_helpers')
 const categoryhelpers = require('../helpers/category_helpers')
 const product_helpers = require('../helpers/product_helpers')
-const user_helpers = require('../helpers/user_helpers')
+const user_helpers = require('../helpers/user_helpers');
+const { FlexFlowContext } = require('twilio/lib/rest/flexApi/v1/flexFlow');
 let ad
 
 const admin={
@@ -43,11 +44,20 @@ const admin={
       let totalcustomers = await saleshelpers.totalCustomers()
       let topSelling = await saleshelpers.topSellingProducts()
       let yearlysales = await sales_helpers.yearlySalesReport()
-      let todaycount = dailysales[0]
-      let monthlyamount = monthlysales[0].monthlysaleamount
-      let todayamount = dailysales[0].dailySaleAmount
-      console.log('......................................');
-      console.log(topSelling[0].productdetails);
+      let todaycount
+      let monthlyamount
+      let todayamount
+      if(dailysales[0]!=null&&monthlysales[0]!=null){
+        todaycount = dailysales[0]
+      monthlyamount = monthlysales[0].monthlysaleamount
+      todayamount = dailysales[0].dailySaleAmount
+      }else{
+         todaycount = 0
+        monthlyamount=0
+        todayamount=0
+      }
+      
+      
       res.render('admin/admin_dashboard',{admin:true,ad,dailysales,todaycount,totalcustomers,topSelling,monthlysales,yearlysales,monthlyamount,todayamount});
     }
     else{
