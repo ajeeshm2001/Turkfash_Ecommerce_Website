@@ -44,6 +44,10 @@ handlebars.registerHelper("productstatus2",function(value,options){
   if(value == 'Delivered')
   return(value = true)
 })
+handlebars.registerHelper("wishlist",function(value,options){
+  if(value == 0)
+  return(value = true)
+})
 handlebars.registerHelper("productstatus3",function(value,options){
   if(value == 'Cancelled')
   return(value = true)

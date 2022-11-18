@@ -1,4 +1,3 @@
-const { response } = require("../../app");
 
 
 function addTocart(proId,stock){

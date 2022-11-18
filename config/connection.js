@@ -4,7 +4,7 @@ const state = {
 }
 
 module.exports.connect=(done)=>{
-    const url='mongodb://localhost:27017'
+    const url='mongodb+srv://ajeesh2001:Ajeesh%40123@cluster0.susfc04.mongodb.net/test'
     const dbname = 'turkfash'
 
     mongoClient.connect(url,(err,data)=>{

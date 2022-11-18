@@ -27,15 +27,40 @@
                 </tbody>
               </table>
     </div>
+
+
+    <div class="modal fade" id="verticalycentered" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Add Offer (%)</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="offerform">
+                          <input type="number" class="form-control" id="offer" placeholder="Offer Percentage" min="1" max="99">
+
+                    
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Save changes</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End Vertically centered Modal-->
   </section>
   <script>
-    function addOffer(proId){
-        swal("Enter Your Offer Percentage :", {
-  content: "input",
-})
-.then((value) => {
+ 
+
+
+function addOffer(proId){
+  
+  $('#verticalycentered').modal('show')
+  $('#offerform').submit((e)=>{
+    e.preventDefault()
+      let value = document.getElementById('offer').value
   console.log(value)
-  $.ajax({
+    $.ajax({
     url:'/admin/addoffer',
     data:{
       productId:proId,
@@ -43,11 +68,12 @@
     },
     method:'put',
     success:(response)=>{
-      document.getElementById(proId).innerHTML=value
+      location.reload()
     }
   })
-});
-    }
+  })
+  
+}
 
     function deleteoffer(proId){
 
