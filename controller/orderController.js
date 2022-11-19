@@ -106,7 +106,7 @@ module.exports.userPlaceOrder= async (req, res) => {
   module.exports.returnOrderProductPost=async(req,res)=>{
     userhelpers.returnProduct(req.body,req.session.user._id).then(async()=>{
       let update=await userhelpers.updateReturnStatus(req.body.orderId,req.body.productID)
-      res.redirect('/dashboard')
+      res.redirect('/dashboard/order')
     })
   }
 

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const categoryhelpers = require('../helpers/category_helpers')
-const {upload, upload2, upload3} = require('../public/javascripts/fileupload');
+const {upload, upload2, upload3, upload4} = require('../public/javascripts/fileupload');
 const { adminLogin, adminLoginPost, adminPanel, adminViewProduct, adminAddProduct, adminAddProductPost, deleteProducts, editProductPage, editProduct, adminLogOut, productOffer, adminAddProductOffer, adminDeleteProductOffer, viewAllCategories, addCategoryProductOffer, viewAllReturnOrder, updateReturnOrder } = require('../controller/adminController');
 const { viewUsers, userBlock, userUnblock } = require('../controller/userController');
 const { addCategories, addCategoryPost, viewCategory, editCategory, editCategoryPost, deleteCategory } = require('../controller/categoryController');
@@ -104,5 +104,19 @@ router.get('/select',(req,res)=>{
   console.log(req.query.carlist);
 })
 
+
+router.get('/addbrand',(req,res)=>{
+  res.render('admin/admin_addbrand',{admin:true})
+})
+
+router.post('/addbrand',upload4.any('file'),(req,res)=>{
+  console.log('///////////////////////>>>>><<<<<<<<');
+  const brand = req.body
+    brand.img = req.files[0].filename
+  categoryhelpers.addBrand(brand).then(()=>{
+    res.redirect('/admin/addbrand')
+
+  })
+})
   
 module.exports = router;

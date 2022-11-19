@@ -37,10 +37,32 @@
         .img{
             width:0% ;
         }
+       .loading {
+  height: 0;
+  width: 0;
+  padding: 15px;
+  border: 6px solid #ccc;
+  border-right-color: #888;
+  border-radius: 22px;
+  -webkit-animation: rotate 1s infinite linear;
+  /* left, top and position just for the demo! */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+@-webkit-keyframes rotate {
+  /* 100% keyframe for  clockwise. 
+     use 0% instead for anticlockwise */
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
     </style>
 </head>
 
-<body>
+<body onload="loadfun()">
+    <div class="loading" id="loading"></div>
     <div class="page-wrapper">
         <header class="header header-11">
             <div class="header-middle sticky-header">
@@ -49,269 +71,22 @@
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
                                 <li class="megamenu-container active">
-                                    <a href="index.html" class="sf-with-ul">Home</a>
+                                    <a href="/" class="sf-with-ul">Home</a>
 
-                                    <div class="megamenu demo">
-                                        <div class="menu-col">
-                                            <div class="menu-title">Choose your demo</div><!-- End .menu-title -->
-
-                                            <div class="demo-list">
-                                                <div class="demo-item">
-                                                    <a href="index-1.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/1.jpg);"></span>
-                                                        <span class="demo-title">01 - furniture store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item">
-                                                    <a href="index-2.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/2.jpg);"></span>
-                                                        <span class="demo-title">02 - furniture store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item">
-                                                    <a href="index-3.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/3.jpg);"></span>
-                                                        <span class="demo-title">03 - electronic store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item">
-                                                    <a href="index-4.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/4.jpg);"></span>
-                                                        <span class="demo-title">04 - electronic store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item">
-                                                    <a href="index-5.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/5.jpg);"></span>
-                                                        <span class="demo-title">05 - fashion store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item">
-                                                    <a href="index-6.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/6.jpg);"></span>
-                                                        <span class="demo-title">06 - fashion store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item">
-                                                    <a href="index-7.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/7.jpg);"></span>
-                                                        <span class="demo-title">07 - fashion store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item">
-                                                    <a href="index-8.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/8.jpg);"></span>
-                                                        <span class="demo-title">08 - fashion store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item">
-                                                    <a href="index-9.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/9.jpg);"></span>
-                                                        <span class="demo-title">09 - fashion store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item">
-                                                    <a href="index-10.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/10.jpg);"></span>
-                                                        <span class="demo-title">10 - shoes store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-11.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/11.jpg);"></span>
-                                                        <span class="demo-title">11 - furniture simple store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-12.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/12.jpg);"></span>
-                                                        <span class="demo-title">12 - fashion simple store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-13.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/13.jpg);"></span>
-                                                        <span class="demo-title">13 - market</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-14.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/14.jpg);"></span>
-                                                        <span class="demo-title">14 - market fullwidth</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-15.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/15.jpg);"></span>
-                                                        <span class="demo-title">15 - lookbook 1</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-16.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/16.jpg);"></span>
-                                                        <span class="demo-title">16 - lookbook 2</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-17.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/17.jpg);"></span>
-                                                        <span class="demo-title">17 - fashion store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-18.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/18.jpg);"></span>
-                                                        <span class="demo-title">18 - fashion store (with sidebar)</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-19.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/19.jpg);"></span>
-                                                        <span class="demo-title">19 - games store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-20.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/20.jpg);"></span>
-                                                        <span class="demo-title">20 - book store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-21.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/21.jpg);"></span>
-                                                        <span class="demo-title">21 - sport store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-22.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/22.jpg);"></span>
-                                                        <span class="demo-title">22 - tools store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-23.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/23.jpg);"></span>
-                                                        <span class="demo-title">23 - fashion left navigation store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                                <div class="demo-item hidden">
-                                                    <a href="index-24.html">
-                                                        <span class="demo-bg" style="background-image: url(userassets/images/menu/demos/24.jpg);"></span>
-                                                        <span class="demo-title">24 - extreme sport store</span>
-                                                    </a>
-                                                </div><!-- End .demo-item -->
-
-                                            </div><!-- End .demo-list -->
-
-                                            <div class="megamenu-action text-center">
-                                                <a href="#" class="btn btn-outline-primary-2 view-all-demos"><span>View All Demos</span><i class="icon-long-arrow-right"></i></a>
-                                            </div><!-- End .text-center -->
-                                        </div><!-- End .menu-col -->
-                                    </div><!-- End .megamenu -->
+                                    
                                 </li>
                                 <li>
-                                    <a href="category.html" class="sf-with-ul">Shop</a>
+                                    <a href="/pagination?page=1" class="sf-with-ul">Products</a>
 
-                                    <div class="megamenu megamenu-md">
-                                        <div class="row no-gutters">
-                                            <div class="col-md-8">
-                                                <div class="menu-col">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="menu-title">Shop with sidebar</div><!-- End .menu-title -->
-                                                            <ul>
-                                                                <li><a href="category-list.html">Shop List</a></li>
-                                                                <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
-                                                                <li><a href="category.html">Shop Grid 3 Columns</a></li>
-                                                                <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
-                                                                <li><a href="category-market.html"><span>Shop Market<span class="tip tip-new">New</span></span></a></li>
-                                                            </ul>
-
-                                                            <div class="menu-title">Shop no sidebar</div><!-- End .menu-title -->
-                                                            <ul>
-                                                                <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span class="tip tip-hot">Hot</span></span></a></li>
-                                                                <li><a href="category-fullwidth.html">Shop Fullwidth No Sidebar</a></li>
-                                                            </ul>
-                                                        </div><!-- End .col-md-6 -->
-
-                                                        <div class="col-md-6">
-                                                            <div class="menu-title">Product Category</div><!-- End .menu-title -->
-                                                            <ul>
-                                                                <li><a href="product-category-boxed.html">Product Category Boxed</a></li>
-                                                                <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span class="tip tip-new">New</span></span></a></li>
-                                                            </ul>
-                                                            <div class="menu-title">Shop Pages</div><!-- End .menu-title -->
-                                                            <ul>
-                                                                <li><a href="cart.html">Cart</a></li>
-                                                                <li><a href="checkout.html">Checkout</a></li>
-                                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                                                <li><a href="dashboard.html">My Account</a></li>
-                                                                <li><a href="#">Lookbook</a></li>
-                                                            </ul>
-                                                        </div><!-- End .col-md-6 -->
-                                                    </div><!-- End .row -->
-                                                </div><!-- End .menu-col -->
-                                            </div><!-- End .col-md-8 -->
-
-                                            <div class="col-md-4">
-                                                <div class="banner banner-overlay">
-                                                    <a href="category.html" class="banner banner-menu">
-                                                        <img src="userassets/images/menu/banner-1.jpg" alt="Banner">
-
-                                                        <div class="banner-content banner-content-top">
-                                                            <div class="banner-title text-white">Last <br>Chance<br><span><strong>Sale</strong></span></div><!-- End .banner-title -->
-                                                        </div><!-- End .banner-content -->
-                                                    </a>
-                                                </div><!-- End .banner banner-overlay -->
-                                            </div><!-- End .col-md-4 -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .megamenu megamenu-md -->
+                                    
                                 </li>
                                 <li>
-                                    <a href="elements-list.html" class="sf-with-ul">Elements</a>
+                                    <a href="/dashboard/profile" class="">Profile</a>
 
-                                    <ul>
-                                        <li><a href="elements-products.html">Products</a></li>
-                                        <li><a href="elements-typography.html">Typography</a></li>
-                                        <li><a href="elements-titles.html">Titles</a></li>
-                                        <li><a href="elements-banners.html">Banners</a></li>
-                                        <li><a href="elements-product-category.html">Product Category</a></li>
-                                        <li><a href="elements-video-banners.html">Video Banners</a></li>
-                                        <li><a href="elements-buttons.html">Buttons</a></li>
-                                        <li><a href="elements-accordions.html">Accordions</a></li>
-                                        <li><a href="elements-tabs.html">Tabs</a></li>
-                                        <li><a href="elements-testimonials.html">Testimonials</a></li>
-                                        <li><a href="elements-blog-posts.html">Blog Posts</a></li>
-                                        <li><a href="elements-portfolio.html">Portfolio</a></li>
-                                        <li><a href="elements-cta.html">Call to Action</a></li>
-                                        <li><a href="elements-icon-boxes.html">Icon Boxes</a></li>
-                                    </ul>
+                                    
                                 </li>
 
-                                <li><a href="#">Orders</a></li>
+                                <li><a href="/dashboard/order">Orders</a></li>
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
 
@@ -323,7 +98,7 @@
 
                     <div class="header-center">
                         <a href="index.html" class="logo">
-                            <img src="userassets/images/demos/demo-18/logo.png" alt="Molla Logo" width="82" height="25">
+                            <img src="/logoimages/turkfash-logo.png" alt="Molla Logo" width="160" height="auto">
                         </a>
                     </div><!-- End .header-center -->
 
@@ -463,7 +238,7 @@
                     <div class="col-md-3">
                     
                         <div class=" banner banner-hover me-3 ">
-                            <a href="#">
+                            <a href="/viewcategory/{{this.Name}}">
                                 <img src="pictures/categoryimages/{{this.img}}" alt="Banner" style="" class="product-image">
                             </a>
 
@@ -591,40 +366,20 @@
                             }
                         }
                     }'>
-                    <a href="#" class="brand">
-                        <img src="../userassets/images/brands/1.png" alt="Brand Name">
+                    {{#each brand}}
+                    <a href="/viewbrandproduct/{{this.brand}}" class="brand">
+                        <img src="/pictures/brandimages/{{this.img}}" alt="Brand Name">
                     </a>
+                    {{/each}}
 
-                    <a href="#" class="brand">
-                        <img src="../userassets/images/brands/2.png" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="../userassets/images/brands/3.png" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="../userassets/images/brands/4.png" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="../userassets/images/brands/5.png" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="../userassets/images/brands/6.png" alt="Brand Name">
-                    </a>
-
-                    <a href="#" class="brand">
-                        <img src="../userassets/images/brands/7.png" alt="Brand Name">
-                    </a>
+                    
                 </div><!-- End .owl-carousel -->
             </div><!-- End .container -->
 
             <div class="bg-lighter pt-5 pb-5">
                 <div class="container">
                     <div class="heading text-center">
-                        <h2 class="title instagram">Let Us Inspire You On Instagram</h2><!-- End .title -->
+                        <h2 class="title instagram">Let Us Inspire You On Most Selling Products</h2><!-- End .title -->
                         <p class="title-desc">Donec nec justo eget felis facilisis fermentum.</p><!-- End .title-desc -->
                     </div><!-- End .heading -->
 
@@ -652,50 +407,21 @@
                                     "items":5
                                 }
                             }
-                        }'>
+                        }'>{{#each topSelling}}
+                        <a href="#">
                         <div class="instagram-feed">
-                            <img src="userassets/images/demos/demo-18/instagram/1.jpg" alt="img">
+                            {{#each this.productdetails}}
+                            <img src="/pictures/productimages/{{this.img.[1]}}" alt="img">
 
                             <div class="instagram-feed-content">
-                                <a href="#"><i class="icon-heart-o"></i>466</a>
-                                <a href="#"><i class="icon-comments"></i>65</a>
+                                
                             </div><!-- End .instagram-feed-content -->
                         </div><!-- End .instagram-feed -->
-
-                        <div class="instagram-feed">
-                            <img src="userassets/images/demos/demo-18/instagram/2.jpg" alt="img">
-
-                            <div class="instagram-feed-content">
-                                <a href="#"><i class="icon-heart-o"></i>280</a>
-                                <a href="#"><i class="icon-comments"></i>22</a>
-                            </div><!-- End .instagram-feed-content -->
-                        </div><!-- End .instagram-feed -->
-
-                        <div class="instagram-feed">
-                            <img src="userassets/images/demos/demo-18/instagram/3.jpg" alt="img">
-
-                            <div class="instagram-feed-content">
-                                <a href="#"><i class="icon-heart-o"></i>123</a>
-                                <a href="#"><i class="icon-comments"></i>10</a>
-                            </div><!-- End .instagram-feed-content -->
-                        </div><!-- End .instagram-feed -->
-                        <div class="instagram-feed">
-                            <img src="userassets/images/demos/demo-18/instagram/4.jpg" alt="img">
-
-                            <div class="instagram-feed-content">
-                                <a href="#"><i class="icon-heart-o"></i>290</a>
-                                <a href="#"><i class="icon-comments"></i>0</a>
-                            </div><!-- End .instagram-feed-content -->
-                        </div><!-- End .instagram-feed -->
-                        <div class="instagram-feed">
-                            <img src="userassets/images/demos/demo-18/instagram/5.jpg" alt="img">
-
-                            <div class="instagram-feed-content">
-                                <a href="#"><i class="icon-heart-o"></i>582</a>
-                                <a href="#"><i class="icon-comments"></i>98</a>
-                            </div><!-- End .instagram-feed-content -->
-                        </div><!-- End .instagram-feed -->
-                    </div><!-- End .owl-carousel -->
+                        {{/each}}
+                        </a>
+                        {{/each}}
+                        
+                        
 
                     <div class="more-container text-center">
                         <a href="#" class="btn btn-outline-primary-2 btn-more">@Molla Instagram</a>
@@ -704,137 +430,7 @@
             </div><!-- End .bg-lighter pt-5 pb-5 -->
         </main><!-- End .main -->
 
-        <footer class="footer footer-dark">
-            <div class="icon-boxes-container">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-rocket"></i>
-                                </span>
-
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Free Shipping</h3><!-- End .icon-box-title -->
-                                    <p>Orders $50 or more</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-                        
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-rotate-left"></i>
-                                </span>
-
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Free Returns</h3><!-- End .icon-box-title -->
-                                    <p>Within 30 days</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-info-circle"></i>
-                                </span>
-
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Get 20% Off 1 Item</h3><!-- End .icon-box-title -->
-                                    <p>When you sign up</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="icon-box icon-box-side">
-                                <span class="icon-box-icon">
-                                    <i class="icon-life-ring"></i>
-                                </span>
-
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">We Support</h3><!-- End .icon-box-title -->
-                                    <p>24/7 amazing services</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .icon-boxes-container -->
-            <div class="footer-middle">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="widget widget-about">
-                                <img src="userassets/images/demos/demo-18/logo-footer.png" class="footer-logo" alt="Footer Logo" width="82" height="25">
-                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
-
-                                <div class="social-icons">
-                                    <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
-                                    <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                                    <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                                    <a href="#" class="social-icon" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
-                                    <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
-                                </div><!-- End .soial-icons -->
-                            </div><!-- End .widget about-widget -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="widget">
-                                <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
-
-                                <ul class="widget-list">
-                                    <li><a href="about.html">About Molla</a></li>
-                                    <li><a href="#">How to shop on Molla</a></li>
-                                    <li><a href="#">FAQ</a></li>
-                                    <li><a href="contact.html">Contact us</a></li>
-                                    <li><a href="login.html">Log in</a></li>
-                                </ul><!-- End .widget-list -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="widget">
-                                <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
-
-                                <ul class="widget-list">
-                                    <li><a href="#">Payment Methods</a></li>
-                                    <li><a href="#">Money-back guarantee!</a></li>
-                                    <li><a href="#">Returns</a></li>
-                                    <li><a href="#">Shipping</a></li>
-                                    <li><a href="#">Terms and conditions</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                </ul><!-- End .widget-list -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="widget">
-                                <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
-
-                                <ul class="widget-list">
-                                    <li><a href="#">Sign In</a></li>
-                                    <li><a href="cart.html">View Cart</a></li>
-                                    <li><a href="#">My Wishlist</a></li>
-                                    <li><a href="#">Track My Order</a></li>
-                                    <li><a href="#">Help</a></li>
-                                </ul><!-- End .widget-list -->
-                            </div><!-- End .widget -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .footer-middle -->
-
-            <div class="footer-bottom">
-                <div class="container">
-                    <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p><!-- End .footer-copyright -->
-                    <figure class="footer-payments">
-                        <img src="userassets/images/payments.png" alt="Payment methods" width="272" height="20">
-                    </figure><!-- End .footer-payments -->
-                </div><!-- End .container -->
-            </div><!-- End .footer-bottom -->
-        </footer><!-- End .footer -->
+        
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
@@ -845,10 +441,10 @@
         <div class="mobile-menu-wrapper">
             <span class="mobile-menu-close"><i class="icon-close"></i></span>
 
-            <form action="#" method="get" class="mobile-search">
+            <form action="/search" method="post" class="mobile-search">
                 <label for="mobile-search" class="sr-only">Search</label>
-                <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
-                <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                <input type="search" class="form-control" name="q" id="mobilesear" placeholder="Search in..." required>
+                <button class="btn btn-primary" type="submit" ><i class="icon-search"></i></button>
             </form>
             
             <nav class="mobile-nav">
@@ -1150,6 +746,21 @@
             location.href='/searchproduct'
         }
        })
+    }
+    function mobilesearch(){
+       let product = document.getElementById('mobilesear').innerHTML
+       $.ajax({
+        url:'/search/'+product,
+        method:'get',
+        success:(response)=>{
+            location.href='/searchproduct'
+        }
+       })
+    }
+
+    let load = document.getElementById('loading')
+    function loadfun(){
+        load.style.display='none'
     }
 </script>
 

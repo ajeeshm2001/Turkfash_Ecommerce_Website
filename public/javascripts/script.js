@@ -14,8 +14,19 @@ function addTocart(proId,stock){
                         url:'/countcart',
                         method:'get',
                         success:(response)=>{
-                            $('#cartcount').html(response)
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added Successfully',
+                                text: ' Item Successfully added to cart',
+                               
+                            }).then(()=>{
+                                document.getElementById('addtocart').style.display='none'
+                                document.getElementById('gotocart').style.display='block'
+                                $('#cartcount').html(response)
 
+                            })
+
+                           
                         }
                     })
                         

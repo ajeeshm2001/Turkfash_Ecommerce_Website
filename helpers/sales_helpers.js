@@ -76,8 +76,7 @@ module.exports={
                     }
                 }
             ]).toArray().then((response)=>{
-                console.log("producteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                console.log(response);
+               
                 resolve(response)
             })
         })

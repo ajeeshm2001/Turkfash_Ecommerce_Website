@@ -30,10 +30,24 @@ const storage3 = multer.diskStorage({
   }
 })
 
+
+/*... BANNER IMAGE STORAGE ...*/
+const storage4=multer.diskStorage({
+  destination:function(req,file,callback){
+    callback(null,'public/pictures/brandimages')
+  },
+  filename:function(req,file,callback){
+    callback(null,file.originalname+'-'+Date.now())
+  }
+  
+})
+
+
 const upload =multer({storage:storage})
 const upload2 = multer({storage:storage2})
 const upload3 = multer({storage:storage3})
+const upload4 = multer({storage:storage4})
 
 module.exports={
-    upload,upload2,upload3
+    upload,upload2,upload3,upload4
 }

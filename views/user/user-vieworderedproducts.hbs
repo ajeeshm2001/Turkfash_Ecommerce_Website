@@ -61,7 +61,7 @@
         <button class="btn btn-danger" onclick="cancelorder('{{this._id}}','{{this.products.item}}')">Cancel</button>
     {{/if}}
     {{#if (productstatus1 this.products.status)}}
-            <button class="btn btn-danger">Cancel</button>
+            <button class="btn btn-danger" onclick="cancelorder('{{this._id}}','{{this.products.item}}')">Cancel</button>
             {{/if}}
 
     </div>
@@ -71,64 +71,7 @@
   {{/each}}
 
   
-<div class="modal fade" id="returnitem" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="modalclose()">
-                        <span aria-hidden="true"><i class="icon-close"></i></span>
-                    </button>
 
-                    <div class="form-box">
-                        <div class="form-tab">
-                            <ul class="nav nav-pills nav-fill" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin"
-                                        role="tab" aria-controls="signin" aria-selected="true">RETURN ITEM</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content" id="tab-content-5">
-                                <div class="tab-pane fade show active" id="signin" role="tabpanel"
-                                    aria-labelledby="signin-tab">
-                                    <form id="returnform">
-
-                                        <div class="form-group">
-                                            <label for="singin-email">Reason For Return</label>
-                                            <input type="text" class="form-control" name="returnreason"
-                                                required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-group">
-                                            <label for="singin-email">Reason Details</label>
-                                            <input type="text" class="form-control"  name="returndetails"
-                                                required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-group">
-                                            <label for="singin-password">Comments</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" ></textarea>
-
-                                        </div><!-- End .form-group -->
-                                        <p class="text-success" id="success"></p>
-                                        <p class="text-danger" id="danger"></p>
-
-                                        <div class="form-footer">
-                                            <button type="submit" class="btn btn-outline-primary-2 text-centre">
-                                                <span>SUBMIT</span>
-                                                <i class="icon-long-arrow-right"></i>
-                                            </button>
-                                        </div><!-- End .form-footer -->
-                                    </form>
-
-                                </div><!-- .End .tab-pane -->
-
-                            </div><!-- End .tab-content -->
-                        </div><!-- End .form-tab -->
-                    </div><!-- End .form-box -->
-                </div><!-- End .modal-body -->
-            </div><!-- End .modal-content -->
-        </div><!-- End .modal-dialog -->
-    </div><!-- End .modal -->
 
  
  <script>

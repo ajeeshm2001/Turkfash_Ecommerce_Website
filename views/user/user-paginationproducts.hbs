@@ -82,7 +82,7 @@
 
                     <div class="products">
                         <div class="row">
-                            {{#each products}}
+                            {{#each pagproducts}}
                             <div class="col-6 col-md-3">
                                     <div class="product product-4">
                                         <figure class="product-media">
@@ -123,9 +123,26 @@
                     </div>
 
                            
+                <div class=" d-flex justify-content-center">
+                    <div>
+                        <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {{#if products.previous}}
+                  <li class="page-item"><a class="page-link" href="/pagination?page={{products.previous.page}}">Previous</a></li>
+                  {{/if}}
+                  {{#each pages}}
+                  <li class="page-item"><a class="page-link" href="/pagination?page={{this}}">{{this}}</a></li>
+             {{/each}}
+             {{#if products.next}}
+                  <li class="page-item"><a class="page-link" href="/pagination?page={{products.next.page}}">Next</a></li>
+                  {{/if}}
+                </ul>
+              </nav><!-- End Basic Pagination -->   
+                    </div>
+                           
 
-                                    
-
+                </div>
+                                
                     <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
                     <aside class="sidebar-shop sidebar-filter">
                         <div class="sidebar-filter-wrapper">

@@ -9,5 +9,6 @@ module.exports={
     ADDRESS_COLLECTION:'Address',
     COUPON_COLLECTION:'Coupon',
     WALLET_COLLECTION:'wallet',
-    RETURN_COLLECTION:'return'
+    RETURN_COLLECTION:'return',
+    BRAND_COLLECTION:'brand'
 }

@@ -9,12 +9,16 @@ let verify;
 
 
 module.exports.addToCart= (req, res) => {
+    
     userhelpers
       .addTocart(req.params.id, req.session.user._id)
       .then((response) => {
         console.log(response);
         res.json({ status: true });
       });
+  
+
+    
   }
 
 

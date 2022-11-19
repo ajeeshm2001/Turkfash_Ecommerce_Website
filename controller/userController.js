@@ -4,6 +4,7 @@ var categoryhelpers = require("../helpers/category_helpers");
 var bannerhelpers = require("../helpers/banner_helpers");
 const { CART_HELPERS } = require("../config/collection");
 const coupon_helpers = require("../helpers/coupon_helpers");
+const saleshelpers = require('../helpers/sales_helpers')
 
 const client = require("twilio")(
   process.env.TWILIO_SID_KEY,
@@ -24,6 +25,13 @@ const userSession = (req, res, next) => {
 
 module.exports.userHomepage= async function (req, res, next) {
   let cartCount = 0;
+  let wishlistCount =0;
+  let brand = await categoryhelpers.getAllBrand()
+  let topSelling = await saleshelpers.topSellingProducts()
+  console.log(topSelling);
+  console.log('////////...');
+  console.log(topSelling.productdetails);
+
   if (req.session.user) {
     cartCount = await userhelpers.getCartCount(req.session.user._id);
     wishlistCount = await userhelpers.getWishCount(req.session.user._id);
@@ -43,7 +51,8 @@ module.exports.userHomepage= async function (req, res, next) {
         cartCount,
         banner,
         wishlistCount,
-        
+        brand,
+        topSelling
       });
     });
   });
@@ -267,6 +276,7 @@ module.exports.searchProduct=(req,res)=>{
   try{
     console.log(req.body);
     userhelpers.searchProduct(req.body.q).then((products)=>{
+      console.log('hsdisjdij');
       console.log(products);
       res.render('user/user-searchproduct',{users:true,products})
     })

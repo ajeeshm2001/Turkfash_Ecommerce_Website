@@ -50,5 +50,26 @@ module.exports={
                 resolve()
             })
         })
+    },
+    addBrand:(brand)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.BRAND_COLLECTION).insertOne(brand).then(()=>{
+                resolve()
+            })
+        })
+    },
+    getAllBrand:()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.BRAND_COLLECTION).find().toArray().then((data)=>{
+                resolve(data)
+            })
+        })
+    },
+    getBrandProducts:(brand)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.PRODUCT_HELPERS).find({brand:brand}).toArray().then((data)=>{
+                resolve(data)
+            })
+        })
     }
 }

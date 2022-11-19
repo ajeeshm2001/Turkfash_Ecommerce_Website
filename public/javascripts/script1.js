@@ -127,6 +127,8 @@ function paypalPayment(response) {
 }
 
 function razorPayment(order) {
+  
+    
     var options = {
         "key": "rzp_test_8h8AtEo7U2mnNt", // Enter the Key ID generated from the Dashboard
         "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise

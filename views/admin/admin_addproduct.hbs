@@ -24,6 +24,25 @@
   
                     <br>
                     <br>
+                    
+<div class="col-md-6">
+                        <label for="" class="mb-3">Brand</label>
+<br>
+                <select class="form-select" aria-label="Default select example" name="brand">
+                                            <option value="">Choose One Brand</option>
+
+                    {{#each brand}}
+  <option value="{{this.brand}}">{{this.brand}}</option>
+  {{/each}}
+  
+</select>
+</div>
+
+
+                    
+  
+                    <br>
+                    <br>
                     <label for="">Size</label>
                     <input type="text" name="Size" class="form-control" required>
                     <br>

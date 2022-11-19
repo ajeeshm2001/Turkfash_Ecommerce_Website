@@ -17,10 +17,13 @@ module.exports={
     },
     getAllProducts:()=>{
         return new Promise(async(resolve,reject)=>{
-            let products=await db.get().collection(collection.PRODUCT_HELPERS).find().toArray()
+            db.get().collection(collection.PRODUCT_HELPERS).find().toArray().then((products)=>{
+                resolve(products)
+
+            })
+            // let products=await db.get().collection(collection.PRODUCT_HELPERS).find().toArray()
             
        
-            resolve(products)
         })
     },
     deleteProduct:(productId)=>{
@@ -147,6 +150,13 @@ module.exports={
             ]).toArray().then((response)=>{
                 console.log(response);
                 resolve(response)
+            })
+        })
+    },
+    getPaginatedProducts:(limit,skip)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.PRODUCT_HELPERS).find().limit(limit).skip(skip).toArray().then((data)=>{
+                resolve(data)
             })
         })
     }

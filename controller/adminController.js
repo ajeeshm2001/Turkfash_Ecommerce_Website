@@ -78,9 +78,10 @@ const admin={
   }
 
 
-  module.exports.adminAddProduct=(req,res)=>{
+  module.exports.adminAddProduct=async(req,res)=>{
+    let brand = await categoryhelpers.getAllBrand()
     categoryhelpers.getAllCategories().then((cat)=>{
-      res.render('admin/admin_addproduct',{admin:true,ad,cat})
+      res.render('admin/admin_addproduct',{admin:true,ad,cat,brand})
     })
     
   }

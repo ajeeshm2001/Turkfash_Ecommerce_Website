@@ -8,6 +8,8 @@ const { viewWishlist, addProductsToWishlist, addProductToCartWishlist, orderSucc
 const { userPlaceOrder, userPlaceOrderPost, getOrderProduct, viewOrderProduct, returnProducts, returnOrderProduct, returnOrderProductPost, cancelOrderedProduct } = require("../controller/orderController");
 const { razorpayPayment, paypalPayment, paypalPaymentSuccess, retryPayment, walletBalance } = require("../controller/paymentController");
 const { response } = require("../app");
+const category_helpers = require("../helpers/category_helpers");
+const product_helpers = require("../helpers/product_helpers");
 
 paypal.configure({
   mode: "sandbox", //sandbox or live
@@ -73,7 +75,7 @@ router.delete("/removewishlist",(req,res)=>{
 });
 
 /*...  USER ADD PRODUCT TO CART ...*/
-router.get("/addtocart/:id",userSession,addToCart);
+router.get("/addtocart/:id",addToCart);
 
 /*...  USER VIEW CART ...*/
 router.get("/viewcart", userSession,viewCart);
@@ -91,7 +93,7 @@ router.get("/placeorder", userSession,userPlaceOrder);
 router.post("/placeorder/:total",userPlaceOrderPost);
 
 /*...  USER DASHBOARD ...*/
-router.get("/dashboard", userSession,userDashboard);
+router.get("/dashboard/:url", userSession,userDashboard);
 
 /*...  RAZORPAY PAYMENT ...*/
 router.post("/verify-payment",razorpayPayment);
@@ -155,4 +157,48 @@ router.get('/hi',(req,res)=>{
   res.json(response)
 })
 
+
+router.get('/viewbrandproduct/:name',(req,res)=>{
+  category_helpers.getBrandProducts(req.params.name).then((products)=>{
+    console.log(products);
+  })
+})
+
+
+router.get('/pagination/',(req,res)=>{
+  product_helpers.getAllProducts().then(async(data)=>{
+    const page = parseInt(req.query.page)
+    const limit = parseInt(5)
+    const startIndex = (page-1)*limit
+    const endIndex = page*limit
+    const products={}
+    if(endIndex<data.length){
+      products.next={
+        page:page+1,
+        limit:limit
+      }
+    }
+    
+    if(startIndex>0){
+      products.previous={
+        page:page-1,
+        limit:limit
+      }
+    }
+
+    products.products=await product_helpers.getPaginatedProducts(limit,startIndex)
+    products.pagecount=Math.ceil(parseInt(data.length)/limit)
+    products.pages = Array.from({length:products.pagecount},(_,i)=>
+      i+1
+    )
+    products.currentpage=page
+
+    console.log(products.pages);
+
+    let pagproducts=products.products
+    let pages = products.pages
+    
+    res.render('user/user-paginationproducts',{userheadz:true,users:true,pagproducts,pages,products})
+  })
+})
 module.exports = router;
