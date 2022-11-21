@@ -38,3 +38,10 @@ module.exports.viewWishlist=async (req, res) => {
   module.exports.orderSuccess=(req,res)=>{
     res.render('user/user-ordersuccess',{users:true,userheadz:true,user:req.session.user})
   }
+
+
+  module.exports.deleteWishlistProducts=(req,res)=>{
+    userhelpers.deleteWishlist(req.body.proId,req.session.user._id).then(()=>{
+      res.json({status:true})
+    }) 
+  }

@@ -1067,8 +1067,8 @@
 
         window.onload = function () {
             let url = window.location.href
-            console.log(url)
-            if (url == 'http://localhost:7000/dashboard/order') {
+            let origin = window.location.origin
+            if (url == origin+'/dashboard/order') {
                 document.getElementById('tab-orders-link').click()
             }
             else if (url == 'http://localhost:7000/dashboard/order') {

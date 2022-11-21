@@ -4,14 +4,15 @@ const categoryhelpers = require('../helpers/category_helpers')
 const {upload, upload2, upload3, upload4} = require('../public/javascripts/fileupload');
 const { adminLogin, adminLoginPost, adminPanel, adminViewProduct, adminAddProduct, adminAddProductPost, deleteProducts, editProductPage, editProduct, adminLogOut, productOffer, adminAddProductOffer, adminDeleteProductOffer, viewAllCategories, addCategoryProductOffer, viewAllReturnOrder, updateReturnOrder } = require('../controller/adminController');
 const { viewUsers, userBlock, userUnblock } = require('../controller/userController');
-const { addCategories, addCategoryPost, viewCategory, editCategory, editCategoryPost, deleteCategory } = require('../controller/categoryController');
-const { adminAddBanner, adminAddBannerPost } = require('../controller/bannerController');
+const { addCategories, addCategoryPost, viewCategory, editCategory, editCategoryPost, deleteCategory, adminAddBrand, adminAddBrandPost } = require('../controller/categoryController');
+const { adminAddBanner, adminAddBannerPost, adminViewBanner } = require('../controller/bannerController');
 const { adminViewOrder, adminEditOrder } = require('../controller/orderController');
 const { salesReport } = require('../controller/salesController');
 const { adminAddCoupon, adminAddCouponPost } = require('../controller/couponController');
 const product_helpers = require('../helpers/product_helpers');
 const user_helpers = require('../helpers/user_helpers');
 const banner_helpers = require('../helpers/banner_helpers');
+
 
 /*... ADMIN LOGIN ...*/
 router.route('/adminlogin').get(adminLogin).post(adminLoginPost)
@@ -64,12 +65,8 @@ router.post('/editcategory/:id',upload3.any('file'),editCategoryPost)
 /*... ADMIN ADD BANNER ...*/
 router.get('/addbanner',adminAddBanner)
 
-
-router.get('/viewbanner',async(req,res)=>{
-  let banner = await banner_helpers.getAllbanners()
-  banners=banner[0]
-  res.render('admin/admin_viewbanner',{admin:true,banner,banners})
-})
+/*... ADMIN VIEW BANNER ...*/
+router.get('/viewbanner',adminViewBanner)
 
 /*... ADMIN ADD BANNER POST...*/
 router.post('/addbanner',upload2.any('file'),adminAddBannerPost)
@@ -95,35 +92,27 @@ router.put('/addoffer',adminAddProductOffer)
 /*... ADMIN DELETE PRODUCT OFFER ...*/
 router.delete('/deleteoffer',adminDeleteProductOffer)
 
-
+/*... ADMIN ADD CATEGORY OFFER ...*/
 router.get('/categoryoffer',viewAllCategories)
 
-
+/*... ADMIN VIEW ALL RETURN ORDERS ...*/
 router.put('/addcategoryoffer',addCategoryProductOffer)
 
-
+/*... ADMIN VIEW ALL RETURN ORDERS ...*/
 router.get('/viewreturnorder',viewAllReturnOrder)
 
+/*... ADMIN UPDATE RETURN ORDER ...*/
+router.post('/updatereturn',updateReturnOrder) 
 
-router.post('/updatereturn',updateReturnOrder)
-  
+/*... ADMIN ADD BRAND ...*/
+router.get('/addbrand',adminAddBrand)
+
+/*... ADMIN ADD BRAND POST ...*/
+router.post('/addbrand',upload4.any('file'),adminAddBrandPost)
+
 
 router.get('/select',(req,res)=>{
   console.log(req.query.carlist);
-})
-
-
-router.get('/addbrand',(req,res)=>{
-  res.render('admin/admin_addbrand',{admin:true})
-})
-
-router.post('/addbrand',upload4.any('file'),(req,res)=>{
-  const brand = req.body
-    brand.img = req.files[0].filename
-  categoryhelpers.addBrand(brand).then(()=>{
-    res.redirect('/admin/addbrand')
-
-  })
 })
   
 module.exports = router;

@@ -41,8 +41,8 @@ paypal.configure({
         payment_method: "paypal",
       },
       redirect_urls: {
-        return_url: "http://localhost:7000/success/"+orderId,
-        cancel_url: "http://localhost:7000/cancel",
+        return_url: "http://turkfash.online/success/"+orderId,
+        cancel_url: "http://turkfash.online/cancel",
       },
       transactions: [
         {

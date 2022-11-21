@@ -63,7 +63,7 @@
                     <br>
                     <label class="form-label" for="form3Example4cg">Image</label>
                     <br>
-                    <img id="uploadPreview" style="width: 100px; height: auto;" />
+                    <img id="uploadPreview0" style="width: 100px; height: auto;" />
                     <img id="uploadPreview1" style="width: 100px; height: auto;" />
                     <img id="uploadPreview2" style="width: 100px; height: auto;" />
                     <img id="uploadPreview3" style="width: 100px; height: auto;" />
@@ -72,7 +72,7 @@
 
                     <br>
 
-                    <input type="file" id="uploadImage" class="form-control form-control" name="file" multiple accept="image/apng, image/avif, image/gif, image/jpeg, image/png, image/svg+xml, image/webp" onchange="PreviewImage()" data-bs-toggle="modal" data-bs-target="#exampleModal"/>
+                    <input type="file" id="uploadImage" class="form-control form-control" name="file" multiple accept="image/apng, image/avif, image/gif, image/jpeg, image/png, image/svg+xml, image/webp" onchange="PreviewImagezz(event)" data-bs-toggle="modal" data-bs-target="#exampleModal"/>
                  
                   
                     <button type="submit" class="btn btn-success mt-3">Add Product</button>
@@ -107,21 +107,11 @@
 
 <script type="text/javascript">
 
-    function PreviewImage() {
-        var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("uploadImage").files);
-
-
-
-        oFReader.onload = function (oFREvent) {
-            document.getElementById("uploadPreview").src = oFREvent.target.result;
-                        document.getElementById("uploadPreview1").src = oFREvent.target.result;
-                                    document.getElementById("uploadPreview2").src = oFREvent.target.result;
-                                                document.getElementById("uploadPreview3").src = oFREvent.target.result;
-
-
-
-        };
+    function PreviewImagezz(event) {
+        console.log('ggggggggggggggg')
+       for (i=0;i<event.target.files.length;i++){
+        document.getElementById('uploadPreview'+i).src=URL.createObjectURL(event.target.files[i])
+       }
     };
 
 </script>

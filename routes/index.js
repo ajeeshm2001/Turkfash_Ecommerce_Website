@@ -4,7 +4,7 @@ var userhelpers = require("../helpers/user_helpers");
 const { userLoginPage, userSignUpPage, userSignUpPagePost, userLoginPagePost, userLogOut, userOtpLogin, userOtpSendCode, userOtpVerificationPage, userOtpVerification, userProductDetails, userViewCategory, userHomepage, userDashboard, userProfileUpdate, userPasswordUpdate, userAddAddress, userAddressDelete, userCoupons, searchProduct } = require("../controller/userController");
 const paypal = require("paypal-rest-sdk");
 const { addToCart, viewCart, changeProductQuantity, deleteCartProduct, userCartCount } = require("../controller/cartController");
-const { viewWishlist, addProductsToWishlist, addProductToCartWishlist, orderSuccess } = require("../controller/wishlistController");
+const { viewWishlist, addProductsToWishlist, addProductToCartWishlist, orderSuccess, deleteWishlistProducts } = require("../controller/wishlistController");
 const { userPlaceOrder, userPlaceOrderPost, getOrderProduct, viewOrderProduct, returnProducts, returnOrderProduct, returnOrderProductPost, cancelOrderedProduct } = require("../controller/orderController");
 const { razorpayPayment, paypalPayment, paypalPaymentSuccess, retryPayment, walletBalance } = require("../controller/paymentController");
 const { response } = require("../app");
@@ -67,12 +67,7 @@ router.get("/wishlist", userSession,viewWishlist);
 router.get("/addTocartwishlist/:id", userSession,addProductToCartWishlist);
 
 /*...  DELETE WISHLIST PRODUCT ...*/
-router.delete("/removewishlist",(req,res)=>{
-  userhelpers.deleteWishlist(req.body.proId,req.session.user._id).then(()=>{
-    res.json({status:true})
-  })
-  
-});
+router.delete("/removewishlist",deleteWishlistProducts);
 
 /*...  USER ADD PRODUCT TO CART ...*/
 router.get("/addtocart/:id",addToCart);
@@ -128,28 +123,28 @@ router.get('/countcart',userCartCount)
 /*...  USER ORDER SUCCESS PAGE ...*/
 router.get('/ordersuccess',userSession,orderSuccess)
 
-
+/*...  USER GET ORDER PRODUCTS ...*/
 router.get("/getorderproduct/:id",getOrderProduct); 
 
-
+/*...  USER VIEW ORDER PRODUCTS ...*/
 router.get('/vieworderproducts/:id',viewOrderProduct)
 
-
+/*...  USER RETURN ORDER PRODUCTS ...*/
 router.get('/returnproduct/:id',returnProducts)
 
-
+/*...  USER RETRY PAYMENT ...*/
 router.post('/retrypayment',retryPayment)
 
-
+/*...  USER WALLET BALANCE ...*/
 router.post('/walletbalance',walletBalance)
 
-
+/*...  USER RETURN ORDER PRODUCT ...*/
 router.get('/returnorder/:orderId/:proId',returnOrderProduct)
 
-
+/*...  USER RETURN ORDER PRODUCT POST ...*/
 router.post('/returnproduct',returnOrderProductPost)
 
-
+/*...  USER CANCEL PRODUCT ...*/
 router.post('/cancelorder',userSession,cancelOrderedProduct)
 
 

@@ -78,3 +78,16 @@ module.exports.addCategoryPost=(req,res)=>{
 
     
   }
+
+  module.exports.adminAddBrand=(req,res)=>{
+    res.render('admin/admin_addbrand',{admin:true})
+  }
+
+  module.exports.adminAddBrandPost=(req,res)=>{
+    const brand = req.body
+      brand.img = req.files[0].filename
+    categoryhelpers.addBrand(brand).then(()=>{
+      res.redirect('/admin/addbrand')
+  
+    })
+  }
