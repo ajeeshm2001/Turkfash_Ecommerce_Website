@@ -4,6 +4,13 @@
 
 <!-- molla/cart.html  22 Nov 2019 09:55:06 GMT -->
 <head>
+
+
+
+
+   
+
+
     <style>
         .loading {
   height: 0;
@@ -26,6 +33,9 @@
     -webkit-transform: rotate(360deg);
   }
 }
+.header{
+    position: relative;
+}
     </style>
 </head>
 
@@ -46,7 +56,7 @@
                 <div class="container">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                        <li class="breadcrumb-item"><a href="/pagination?page=1">Shop</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
                     </ol>
                 </div><!-- End .container -->
@@ -109,47 +119,11 @@
                                           
 										</tr>
                                          {{/each}}
-										{{!-- <tr>
-											<td class="product-col">
-												<div class="product">
-													<figure class="product-media">
-														<a href="#">
-															<img src="/userassets/images/products/table/product-2.jpg" alt="Product image">
-														</a>
-													</figure>
-
-													<h3 class="product-title">
-														<a href="#">Blue utility pinafore denim dress</a>
-													</h3><!-- End .product-title -->
-												</div><!-- End .product -->
-											</td>
-											<td class="price-col">$76.00</td>
-											<td class="quantity-col">
-                                                <div class="cart-product-quantity">
-                                                    <input type="number" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                                </div><!-- End .cart-product-quantity -->                                 
-                                            </td>
-											<td class="total-col">$76.00</td>
-											<td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
-										</tr> --}}
+										
 									</tbody>
 								</table><!-- End .table table-wishlist -->
 
-	                			<div class="cart-bottom">
-			            			<div class="cart-discount">
-			            				<form id="couponform">
-			            					<div class="input-group">
-				        						<input id="couponvalue" type="text" class="form-control"  placeholder="coupon code">
-				        						<div class="input-group-append">
-													<button class="btn btn-outline-primary-2" type="submit" onclick="coupon()"><i class="icon-long-arrow-right"></i></button>
-												</div><!-- .End .input-group-append -->
-			        						</div><!-- End .input-group -->
-                                            <p id="couponapply" class="text:success"></p>
-			            				</form>
-			            			</div><!-- End .cart-discount -->
-
-			            			<a href="/" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a>
-		            			</div><!-- End .cart-bottom -->
+	                			
 	                		</div><!-- End .col-lg-9 -->
 	                		<aside class="col-lg-3">
 	                			<div class="summary summary-cart">
@@ -168,10 +142,7 @@
 
 	                						<tr class="summary-shipping-row">
 	                							<td>
-													<div class="custom-control custom-radio">
-														<input type="radio" id="free-shipping" name="shipping" class="custom-control-input" required>
-														<label class="custom-control-label" for="free-shipping">Free Shipping</label>
-													</div><!-- End .custom-control -->
+													<p>Free Delivery</p>
 	                							</td>
 	                							<td>FREE</td>
 	                						</tr><!-- End .summary-shipping-row -->

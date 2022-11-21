@@ -47,8 +47,7 @@ $('#checkoutform').submit((e) => {
                         success: (response) => {
                             
                             if (response.codPayment) {
-                                alert('Order Placed Successfully')
-                                location.href = '/'
+                                location.href = '/ordersuccess'
                             } else if (response.paypal) {
                                 console.log(response)
                 
@@ -57,8 +56,7 @@ $('#checkoutform').submit((e) => {
                             }
                             else if(response.wallet){
                                
-                                    alert("Order Placed")
-                                    location.href='/'
+                                    location.href='/ordersuccess'
                                 
                             }
                              else {
@@ -79,11 +77,10 @@ $('#checkoutform').submit((e) => {
             data: $('#checkoutform').serialize(),
                 
             success: (response) => {
-                console.log(response)
-                console.log('Hello')
+                
                 if (response.codPayment) {
                     alert('Order Placed Successfully')
-                    location.href = '/'
+                    location.href = '/ordersuccess'
                 } else if (response.paypal) {
                     console.log(response)
     
@@ -92,8 +89,7 @@ $('#checkoutform').submit((e) => {
                 }
                 else if(response.wallet){
                     if(response.status){
-                        alert("Order Placed")
-                        location.href='/'
+                        location.href='/ordersuccess'
                     }else{
                         alert("Insuficient Amount")
                     }
@@ -167,7 +163,7 @@ function verifyPayment(payment, order) {
         method: 'post',
         success: (response) => {
             if (response.status) {
-                location.href = '/'
+                location.href = '/ordersuccess'
             }
             else {
                 alert("Failed")
@@ -206,6 +202,11 @@ function coupons() {
             } else {
                 document.getElementById('couponapply').style.color = "red"
                 document.getElementById('couponapply').innerHTML = response.message
+                let subtotal = document.getElementById('subtotal').innerHTML
+                document.getElementById('total').innerHTML=subtotal
+                
+
+
             }
         }
     })

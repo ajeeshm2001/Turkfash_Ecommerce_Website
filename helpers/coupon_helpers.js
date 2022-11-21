@@ -1,8 +1,6 @@
 var db = require("../config/connection");
 var collection = require("../config/collection");
 const bcrypt = require("bcrypt");
-const { resolve, reject } = require("promise");
-const { response } = require("../app");
 const objectid = require("mongodb").ObjectId;
 
 module.exports={
@@ -17,7 +15,7 @@ module.exports={
             let couponfind=await db.get().collection(collection.COUPON_COLLECTION).findOne({couponname:details.couponname})
         console.log(couponfind);
             if(couponfind){
-                let message="Coupon Name Already Exist"
+                let message="Coupon  Already Exist"
                 resolve(message)
                 
             }else{
@@ -44,9 +42,7 @@ module.exports={
                     response.status=false
                     resolve(response)
                 }else{
-                    // db.get().collection(collection.COUPON_COLLECTION).updateOne({couponname:coupon.coupon},{
-                    //     $push:{users:userId}
-                    // })
+                   
                     response.couponoffer=couponname.offer
                     response.message="Coupon Applied"
                     response.status=true

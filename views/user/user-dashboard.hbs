@@ -14,6 +14,9 @@
         .modal-body {
             padding: 39px;
         }
+        .header{
+    position: relative;
+}
     </style>
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
 
@@ -126,7 +129,7 @@
                                                         </div>
                                                         <div>
                                                             <div class="col-md-8">
-                                                                <input type="text" class="form-control"
+                                                                <input type="text" class="form-control" id="myInput"
                                                                     value="{{user.referral}}"
                                                                     style="  border: 2px solid lightblue;border-radius: 4px;"
                                                                     disabled>
@@ -156,48 +159,48 @@
                                         aria-labelledby="tab-orders-link">
                                         {{#each orders}}
                                         <div class="card text-center m-4">
-                                            <div class="row">  
-                                            <div class="card-body d-md-flex">
-                                                <div class="col-md-4">
-                                                    <p>Order id: {{this._id}}</p>
-                                                    <p>To :</p>
-                                                    <h5>{{this.deliveryDetails.name}}</h5>
-                                                    <span>{{this.deliveryDetails.address}}
-                                                        {{this.deliveryDetails.email}}
-                                                        +91{{this.deliveryDetails.mobile}}</span>
+                                            <div class="row">
+                                                <div class="card-body d-md-flex">
+                                                    <div class="col-md-4">
+                                                        <p>Order id: {{this._id}}</p>
+                                                        <p>To :</p>
+                                                        <h5>{{this.deliveryDetails.name}}</h5>
+                                                        <span>{{this.deliveryDetails.address}}
+                                                            {{this.deliveryDetails.email}}
+                                                            +91{{this.deliveryDetails.mobile}}</span>
+
+                                                    </div>
+                                                    <div class="col-md-4 mt-4">
+                                                        <p class="card-text">Total Amount : {{this.totalamount}}</p>
+                                                        <span>
+                                                            Status : {{this.status}}
+                                                            <br>
+                                                            Payment Method : {{this.paymentmethod}}
+                                                            <br>
+                                                            Track Order : {{this.trackOrder}}
+                                                            <br>
+                                                            Date: {{this.date}}
+                                                        </span>
+
+                                                    </div>
+                                                    <div class="col-md-4 mt-5">
+
+                                                        {{#if (trackorder this.status)}}
+                                                        <button class="btn btn-warning mb-5"
+                                                            onclick="retrypayment('{{this._id}}','{{this.totalamount}}','{{this.paymentmethod}}')">Retry
+                                                            Payment</button>
+                                                        {{!-- <a href="/returnproduct/{{this._id}}"
+                                                            class="btn btn-warning mb-5">Retry Payment</a> --}}
+                                                        {{else}}
+                                                        <p>Click to view Products</p>
+                                                        <a href="/vieworderproducts/{{this._id}}"
+                                                            class="btn btn-success mb-5">View Products</a>
+                                                        {{/if}}
+
+
+                                                    </div>
 
                                                 </div>
-                                                <div class="col-md-4 mt-4">
-                                                    <p class="card-text">Total Amount : {{this.totalamount}}</p>
-                                                    <span>
-                                                        Status : {{this.status}}
-                                                        <br>
-                                                        Payment Method : {{this.paymentmethod}}
-                                                        <br>
-                                                        Track Order : {{this.trackOrder}}
-                                                        <br>
-                                                        Date: {{this.date}}
-                                                    </span>
-
-                                                </div>
-                                                <div class="col-md-4 mt-5">
-
-                                                    {{#if (trackorder this.status)}}
-                                                    <button class="btn btn-warning mb-5"
-                                                        onclick="retrypayment('{{this._id}}','{{this.totalamount}}','{{this.paymentmethod}}')">Retry
-                                                        Payment</button>
-                                                    {{!-- <a href="/returnproduct/{{this._id}}"
-                                                        class="btn btn-warning mb-5">Retry Payment</a> --}}
-                                                    {{else}}
-                                                    <p>Click to view Products</p>
-                                                    <a href="/vieworderproducts/{{this._id}}"
-                                                        class="btn btn-success mb-5">View Products</a>
-                                                    {{/if}}
-
-
-                                                </div>
-
-                                            </div>
                                             </div>
                                         </div>
                                         {{/each}}
@@ -205,47 +208,74 @@
 
                                     </div><!-- .End .tab-pane -->
 
+                                    
+
+
+
                                     <div class="tab-pane fade" id="tab-downloads" role="tabpanel"
                                         aria-labelledby="tab-downloads-link">
-                                        <h5>Refferal Code </h5>
-                                        <input type="text" value="{{user.referral}}" id="myInput" disabled>
-
-                                        <br>
                                         <div>
-                                            <h3 class="mt-3">Wallet Balance : <span>{{wallets}}</span></h3>
-                                            <button id="show" class="btn btn-primary" onclick="showtransaction()">Show
-                                                Transactions</button>
-                                            <button id="hide" class="btn btn-primary" onclick="hide()"
-                                                style="display: none;">Hide Transactions</button>
-                                            <div id="table" style="display: none;" class="scroll-top">
-                                                <table class="table table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">No</th>
-                                                            <th scope="col">Date</th>
-                                                            <th scope="col">Debit</th>
-                                                            <th scope="col">Credit</th>
+                                            <h3 class="text-primary">Turkfash Wallet</h3>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body"
+                                                style="border: 2px solid rgb(237, 214, 171);border-radius: 4px; width:auto ;">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <img src="https://cdn.dribbble.com/users/61734/screenshots/5384735/media/cf4f6e9320fbf91053e149fc7cae6b72.png?compress=1&resize=1000x750&vertical=top"
+                                                            alt="" style="height:112px;">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <h5 class="mt-5">Wallet Balance : </h5>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <h4 class="mt-5 ">₹ <span
+                                                                class="text-success mt-5">{{wallets}}</span>
+                                                        </h4>
+                                                    </div>
+                                                    <div class="col-md-3 mt-5">
+                                                        <button onclick="showtransaction()" id="show"
+                                                            class="btn btn-success rounded">Show Transactions</button>
+                                                            <button onclick="hide()" id="hide"
+                                                            class="btn btn-success rounded" style="display: none;">Hide Transactions</button>
+                                                    </div>
+                                                </div>
 
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {{#each wallet}}
-                                                        <tr>
-                                                            <th scope="row">{{inc @index}}</th>
-                                                            <td>{{this.transaction.date}}</td>
-                                                            <td class="text-danger ">-{{this.transaction.debit}}</td>
-                                                            <td class="text-success">+{{this.transaction.credit}}</td>
-
-                                                        </tr>
-                                                        {{/each}}
-                                                    </tbody>
-                                                </table>
                                             </div>
                                         </div>
+                                        <div id="SectionName" STYLE="display:none">Transactions
+                                            {{#each wallet}}
+                                            <div class="card mt-3"
+                                                style="border: 2px solid lightblue;border-radius: 4px; width:auto ;">
+                                                <div class="card-body col-md-10">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <b>{{this.transaction.datez}}</b>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                           <b>{{this.transaction.time}}</b> 
+                                                        </div>
+                                                        <div class="col-md-2 text-danger">
+                                                          <b class="mt-5">-{{this.transaction.debit}}</b> 
+                                                        </div>
+                                                        <div class="col-md-2 text-success">
+                                                            
+                                                          <b> +{{this.transaction.credit}}</b> 
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <b>{{this.transaction.message}}</b>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{/each}}
+                                        </div>
 
-                                        {{!-- <a href="category.html" class="btn btn-outline-primary-2"><span>GO
-                                                SHOP</span><i class="icon-long-arrow-right"></i></a> --}}
                                     </div><!-- .End .tab-pane -->
+
+
+
+
                                     <div class="tab-pane fade" id="tab-address" role="tabpanel"
                                         aria-labelledby="tab-address-link">
                                         <p>The following addresses will be used on the checkout page by default.</p>
@@ -335,7 +365,7 @@
             </div><!-- End .page-content -->
         </main><!-- End .main -->
 
-        
+
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
@@ -981,7 +1011,7 @@
     <script>
         function showtransaction() {
             console.log('hello')
-            document.getElementById('table').style.display = 'block'
+            document.getElementById('SectionName').style.display = 'block'
             document.getElementById('show').style.display = 'none'
 
             document.getElementById('hide').style.display = 'block'
@@ -991,7 +1021,7 @@
     <script>
 
         function hide() {
-            document.getElementById('table').style.display = 'none'
+            document.getElementById('SectionName').style.display = 'none'
             document.getElementById('hide').style.display = 'none'
 
             document.getElementById('show').style.display = 'block'
@@ -1000,6 +1030,7 @@
         function copy() {
             // Get the text field
             var copyText = document.getElementById("myInput");
+            console.log(copyText)
 
             // Select the text field
             copyText.select();

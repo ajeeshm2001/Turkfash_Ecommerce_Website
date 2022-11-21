@@ -11,8 +11,35 @@
                     <label for="">Description</label>
                     <input type="text" name="Description" class="form-control" required value="{{product.Description}}">
                     <br>
-                    <label for="">Category</label>
-                    <input type="text" name="Category" class="form-control" required value="{{product.Category}}">
+                    <div class="col-md-6">
+                        <label for="">Category</label>
+<br>
+                <select class="form-select" aria-label="Default select example" name="Category" required>
+                                            <option value="">{{product.Category}}</option>
+
+                    {{#each category}}
+  <option value="{{this.Name}}">{{this.Name}}</option>
+  {{/each}}
+  
+</select>
+</div>
+                   
+                    <br>
+                     <div class="col-md-6">
+                        <label for="">Brand</label>
+<br>
+                <select class="form-select" aria-label="Default select example" name="brand" required>
+                                            <option value="{{product.brand}}">{{product.brand}}</option>
+
+                    {{#each brand}}
+  <option value="{{this.brand}}">{{this.brand}}</option>
+  {{/each}}
+  
+</select>
+</div>
+<br>
+<label for="">Stock</label>
+                    <input type="text" name="stock" class="form-control" required value="{{product.stock}}">
                     <br>
                     <label for="">Size</label>
                     <input type="text" name="Size" class="form-control" required value="{{product.Size}}">

@@ -28,21 +28,14 @@ module.exports.userHomepage= async function (req, res, next) {
   let wishlistCount =0;
   let brand = await categoryhelpers.getAllBrand()
   let topSelling = await saleshelpers.topSellingProducts()
-  console.log(topSelling);
-  console.log('////////...');
-  console.log(topSelling.productdetails);
-
   if (req.session.user) {
     cartCount = await userhelpers.getCartCount(req.session.user._id);
     wishlistCount = await userhelpers.getWishCount(req.session.user._id);
   }
   producthelpers.getAllProducts().then(async (products) => {
-    // let offer =await producthelpers.offerManagement()
-    console.log('fdggddhdhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
     let banner = await bannerhelpers.getAllbanners();
     categoryhelpers.getAllCategories().then((category) => {
       let user = req.session.user;
-      console.log(user);
       res.render("user/user-homepage2", {
         category,
         products,
@@ -175,17 +168,21 @@ module.exports.userOtpVerification=(req, res) => {
 
 
 module.exports.userProductDetails=async (req, res) => {
+  let cartCount = await userhelpers.getCartCount(req.session.user._id);
+
   let product = await producthelpers.getProductdetail(req.params.id);
   producthelpers.getAllProductsCa(product.Category).then((cate) => {
     let user = req.session.user;
-    res.render("user/user-product", {users:true, product, user, cate ,userheadz:true});
+    res.render("user/user-product", {users:true, product, user, cate ,userheadz:true,cartCount});
   });
 }
 
 
 module.exports.userViewCategory=(req, res) => {
+
   producthelpers.getAllProductsCa(req.params.id).then((cate) => {
-    res.render("user/user-viewcategory", {users:true, cate ,userheadz:true});
+    let length = cate.length
+    res.render("user/user-viewcategory", {users:true, cate ,userheadz:true,length,category:req.params.id,user:req.session.user});
   });
 }
 
@@ -247,8 +244,8 @@ module.exports.userCoupons=(req,res)=>{
 
  module.exports.viewUsers=(req,res)=>{
   if(req.session.Adminlogg){
-    userhelpers.getAllUsers().then((users)=>{
-      res.render('admin/admin_viewusers',{admin:true,users,ad})
+    userhelpers.getAllUsers().then((userss)=>{
+      res.render('admin/admin_viewusers',{admin:true,userss,ad})
     })
   }else{
     res.redirect('/admin/adminlogin')
@@ -276,9 +273,8 @@ module.exports.searchProduct=(req,res)=>{
   try{
     console.log(req.body);
     userhelpers.searchProduct(req.body.q).then((products)=>{
-      console.log('hsdisjdij');
-      console.log(products);
-      res.render('user/user-searchproduct',{users:true,products})
+      let length=products.length
+      res.render('user/user-searchproduct',{users:true,products,userheadz:true,length,user: req.session.user,})
     })
   }catch(err){
       res.send(err)

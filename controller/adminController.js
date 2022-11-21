@@ -110,7 +110,9 @@ const admin={
 
   module.exports.editProductPage=async(req,res)=>{
     let product=await producthelpers.getProductdetail(req.params.id)
-    res.render('admin/admin_editproduct',{admin:true,product})
+    let category = await categoryhelpers.getOneCategory(product.Category)
+    let brand = await categoryhelpers.getOneBrand(product.brand)
+    res.render('admin/admin_editproduct',{admin:true,product,category,brand})
   }
 
 

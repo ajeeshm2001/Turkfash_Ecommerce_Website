@@ -11,6 +11,7 @@ const { salesReport } = require('../controller/salesController');
 const { adminAddCoupon, adminAddCouponPost } = require('../controller/couponController');
 const product_helpers = require('../helpers/product_helpers');
 const user_helpers = require('../helpers/user_helpers');
+const banner_helpers = require('../helpers/banner_helpers');
 
 /*... ADMIN LOGIN ...*/
 router.route('/adminlogin').get(adminLogin).post(adminLoginPost)
@@ -63,6 +64,13 @@ router.post('/editcategory/:id',upload3.any('file'),editCategoryPost)
 /*... ADMIN ADD BANNER ...*/
 router.get('/addbanner',adminAddBanner)
 
+
+router.get('/viewbanner',async(req,res)=>{
+  let banner = await banner_helpers.getAllbanners()
+  banners=banner[0]
+  res.render('admin/admin_viewbanner',{admin:true,banner,banners})
+})
+
 /*... ADMIN ADD BANNER POST...*/
 router.post('/addbanner',upload2.any('file'),adminAddBannerPost)
 
@@ -110,7 +118,6 @@ router.get('/addbrand',(req,res)=>{
 })
 
 router.post('/addbrand',upload4.any('file'),(req,res)=>{
-  console.log('///////////////////////>>>>><<<<<<<<');
   const brand = req.body
     brand.img = req.files[0].filename
   categoryhelpers.addBrand(brand).then(()=>{

@@ -1,12 +1,26 @@
 var db = require('../config/connection')
 var collection = require('../config/collection')
-const { reject, resolve } = require('promise');
+const { reject, resolve } = require('promise')
+const e = require('express')
 const objectid = require('mongodb').ObjectId
 module.exports={
-    addCategory:(category,callback)=>{
-        db.get().collection(collection.CATEGORY_HELPERS).insertOne(category).then(()=>{
-            callback()
-        })
+    addCategory:(cat)=>{
+        return new Promise(async(resolve,reject)=>{
+            let category= await db.get().collection(collection.CATEGORY_HELPERS).findOne({Name:cat.Name})
+            if(category){
+                let message="Category already Exist"
+                resolve(message)
+            }
+            else{
+                db.get().collection(collection.CATEGORY_HELPERS).insertOne(category).then(()=>{
+                    resolve()
+                })
+
+            }
+                
+            
+        })  
+       
     },
     getAllCategories:()=>{
         return new Promise((resolve,reject)=>{
@@ -68,6 +82,20 @@ module.exports={
     getBrandProducts:(brand)=>{
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_HELPERS).find({brand:brand}).toArray().then((data)=>{
+                resolve(data)
+            })
+        })
+    },
+    getOneCategory:(category)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.CATEGORY_HELPERS).find({Name:{$nin:[category]}}).toArray().then((data)=>{
+                resolve(data)
+            })
+        })
+    },
+    getOneBrand:(brand)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.BRAND_COLLECTION).find({brand:{$nin:[brand]}}).toArray().then((data)=>{
                 resolve(data)
             })
         })

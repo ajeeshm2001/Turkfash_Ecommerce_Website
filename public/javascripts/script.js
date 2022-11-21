@@ -20,9 +20,10 @@ function addTocart(proId,stock){
                                 text: ' Item Successfully added to cart',
                                
                             }).then(()=>{
+                                $('#cartcount').html(response)
                                 document.getElementById('addtocart').style.display='none'
                                 document.getElementById('gotocart').style.display='block'
-                                $('#cartcount').html(response)
+                               
 
                             })
 

@@ -10,7 +10,7 @@ module.exports.viewWishlist=async (req, res) => {
     let products = await userhelpers.getAllWishlistprod(req.session.user._id);
     console.log("....");
     console.log(products);
-    res.render("user/user-wishlist", { products ,userheadz:true});
+    res.render("user/user-wishlist", { products ,userheadz:true,users:true,user:req.session.user._id});
   }
 
 
@@ -36,5 +36,5 @@ module.exports.viewWishlist=async (req, res) => {
   }
 
   module.exports.orderSuccess=(req,res)=>{
-    res.render('user/user-ordersuccess',{users:true,userheadz:true})
+    res.render('user/user-ordersuccess',{users:true,userheadz:true,user:req.session.user})
   }

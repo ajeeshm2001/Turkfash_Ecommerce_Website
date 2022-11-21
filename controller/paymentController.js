@@ -103,7 +103,7 @@ paypal.configure({
       } else {
         userhelpers.changePaymentstatus(orderId).then(()=>{
           console.log(JSON.stringify(payment));
-          res.redirect('/');
+          res.redirect('/ordersuccess');
         })
           
       }

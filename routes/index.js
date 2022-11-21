@@ -55,7 +55,7 @@ router.post("/verify",userOtpVerification);
 router.get("/userproduct/:id",userProductDetails);
 
 /*...  USER VIEW CATEGORY ...*/
-router.get("/viewcategory/:id",userViewCategory);
+router.get("/viewcategory/:id",userSession,userViewCategory);
 
 /*...  USER ADD PRODUCT TO WISHLIST ...*/
 router.get("/wishlist/:id",addProductsToWishlist);
@@ -120,13 +120,13 @@ router.delete('/deleteaddress/:id',userAddressDelete)
 router.post('/coupon',userCoupons)
 
 /*...  USER SEARCH PRODUCT ...*/
-router.post('/search',searchProduct)
+router.post('/search',userSession,searchProduct)
 
 /*...  USER CART COUNT ...*/
 router.get('/countcart',userCartCount)
 
 /*...  USER ORDER SUCCESS PAGE ...*/
-router.get('/ordersuccess',orderSuccess)
+router.get('/ordersuccess',userSession,orderSuccess)
 
 
 router.get("/getorderproduct/:id",getOrderProduct); 
@@ -158,14 +158,14 @@ router.get('/hi',(req,res)=>{
 })
 
 
-router.get('/viewbrandproduct/:name',(req,res)=>{
+router.get('/viewbrandproduct/:name',userSession,(req,res)=>{
   category_helpers.getBrandProducts(req.params.name).then((products)=>{
-    console.log(products);
+    res.render('user/user-viewbrand',{products,length:products.length,users:true,userheadz:true,user:req.session.user})
   })
 })
 
 
-router.get('/pagination/',(req,res)=>{
+router.get('/pagination/',userSession,(req,res)=>{
   product_helpers.getAllProducts().then(async(data)=>{
     const page = parseInt(req.query.page)
     const limit = parseInt(5)
@@ -185,6 +185,7 @@ router.get('/pagination/',(req,res)=>{
         limit:limit
       }
     }
+    let length = data.length
 
     products.products=await product_helpers.getPaginatedProducts(limit,startIndex)
     products.pagecount=Math.ceil(parseInt(data.length)/limit)
@@ -198,7 +199,7 @@ router.get('/pagination/',(req,res)=>{
     let pagproducts=products.products
     let pages = products.pages
     
-    res.render('user/user-paginationproducts',{userheadz:true,users:true,pagproducts,pages,products})
+    res.render('user/user-paginationproducts',{userheadz:true,users:true,pagproducts,pages,products,length,limit,user:req.session.user})
   })
 })
 module.exports = router;

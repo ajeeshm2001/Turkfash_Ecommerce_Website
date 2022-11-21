@@ -26,11 +26,20 @@ module.exports = {
                 if(userData.referral){
                     let referral =await  db.get().collection(collection.USER_HELPERS).findOne({referral:userData.referral})
                     if(referral){
+                        let datez = new Date()
+                        let timez = datez.toLocaleTimeString('en-US')
+                        day =datez.getDate()
+            
+                        month =datez.getMonth()+1
+                        year = datez.getFullYear()
+                        let date = `${day}-${month}-${year}`
                         let transaction={
                             credit:100,
                             debit:0,
-                            
-                            date:new Date()
+                            message:"Refferral Amount",
+                            date:new Date(),
+                            datez:date,
+                            time:timez
                         }
                         let wallet =await db.get().collection(collection.WALLET_COLLECTION).findOne({user:referral._id})
                         if(wallet){
@@ -62,10 +71,14 @@ module.exports = {
                         // db.get().collection(collection.USER_HELPERS).updateOne({_id:referral._id},{$push:{wallet:walletObj}})
                         userData.password = await bcrypt.hash(userData.password, 10);
                     userData.referral=shortid.generate()
+                 
                     let transactions={
                         credit:50,
                         debit:0,
-                        date:new Date()
+                        datez:date,
+                        date:new Date(),
+                        time:timez,
+                        message:"Refferral Amount"
                     }
                     
                     
@@ -956,7 +969,7 @@ module.exports = {
             let user = await db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(userId)})
             // let user =await db.get().collection(collection.USER_HELPERS).findOne({_id:objectid(userId)})
             if(totalAmount <= user.balance){
-              
+                
                 response.status=true
                 response.wallet=true
                 resolve(response)
@@ -1058,12 +1071,20 @@ module.exports = {
            
 
             let userwallet = parseInt(user.balance) - parseInt(totalAmount)
+            let datez = new Date()
+                        let timez = datez.toLocaleTimeString('en-US')
+                        day =datez.getDate()
             
+                        month =datez.getMonth()+1
+                        year = datez.getFullYear()
+                        let date = `${day}-${month}-${year}`
                 
             let transaction={
                 credit:0,
                 debit:totalAmount,
-                
+                datez:date,
+                time:timez,
+                message:"Product Purchase",
                 date:new Date()
             }
             db.get().collection(collection.WALLET_COLLECTION).updateOne({user:objectid(userId)},{$set:{balance:userwallet},
@@ -1208,10 +1229,19 @@ module.exports = {
                 console.log(wallet.balance);
                 console.log(newbalance);
                 console.log(details.products);
+                let datez = new Date()
+                        let timez = datez.toLocaleTimeString('en-US')
+                        day =datez.getDate()
+            
+                        month =datez.getMonth()+1
+                        year = datez.getFullYear()
+                        let date = `${day}-${month}-${year}`
                 let transaction={
                     credit:parseInt(details.products),
                     debit:0,
-                    
+                    datez:date,
+                    time:timez,
+                    message:"Product Return",
                     date:new Date()
                 }
                 db.get().collection(collection.WALLET_COLLECTION).updateOne({user:objectid(details.user)},{
@@ -1264,10 +1294,19 @@ module.exports = {
                     }
                     console.log('////////......................><><><><><><>');
                     console.log(amount);
+                    let datez = new Date()
+                        let timez = datez.toLocaleTimeString('en-US')
+                        day =datez.getDate()
+            
+                        month =datez.getMonth()+1
+                        year = datez.getFullYear()
+                        let date = `${day}-${month}-${year}`
                     let transaction={
                         credit:amount,
                         debit:0,
-                        
+                        datez:date,
+                        time:timez,
+                        message:"Product Cancellation",
                         date:new Date()
                     }
                     let wallet = await db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(userId)})

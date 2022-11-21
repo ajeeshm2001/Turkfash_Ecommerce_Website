@@ -7,11 +7,9 @@ const objectid = require('mongodb').ObjectId
 module.exports={
     addProduct:(product,callback)=>{
         product.NewPrice=parseInt(product.NewPrice)
-        console.log(product);
+        product.stock=parseInt(product.stock)
         db.get().collection(collection.PRODUCT_HELPERS).insertOne(product).then((data)=>{
            let cat= db.get().collection(collection.CATEGORY_HELPERS).find().toArray()
-            // console.log(data);
-          
             callback(data.insertedId,cat)
         })
     },
@@ -19,11 +17,7 @@ module.exports={
         return new Promise(async(resolve,reject)=>{
             db.get().collection(collection.PRODUCT_HELPERS).find().toArray().then((products)=>{
                 resolve(products)
-
             })
-            // let products=await db.get().collection(collection.PRODUCT_HELPERS).find().toArray()
-            
-       
         })
     },
     deleteProduct:(productId)=>{
@@ -73,7 +67,6 @@ module.exports={
            if(products.productoffer){
             let offer = products.OldPrice-(products.OldPrice*(b/100))
             offer = Math.round(offer)
-            console.log(offer);
             db.get().collection(collection.PRODUCT_HELPERS).updateOne({_id:objectid(product.productId)},{$set:{productoffer:parseInt(product.productOffer),NewPrice:parseInt(offer),OldPrice:parseInt(products.OldPrice)}
         
         }).then(()=>{

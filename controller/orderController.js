@@ -12,6 +12,10 @@ module.exports.userPlaceOrder= async (req, res) => {
   
     let getallcoupon = await coupon_helpers.getAllcoupon()
     let address = await userhelpers.getAllAddress(req.session.user._id)
+     var addresses=true
+    if(address[0]==null){
+      addresses=false
+    }
     let cartproducts = await userhelpers.getCartproducts(req.session.user._id);
     let total = await userhelpers.getTotalAmount(req.session.user._id);
     if(req.body.coupon){
@@ -24,7 +28,8 @@ module.exports.userPlaceOrder= async (req, res) => {
         total,
         user: req.session.user,
         address,getallcoupon,
-        userheadz:true
+        userheadz:true,
+        addresses
       });
     }else{
       res.redirect('/')
@@ -39,16 +44,17 @@ module.exports.userPlaceOrder= async (req, res) => {
     if(req.body.coupon){
       let coupon =await coupon_helpers.userCouponPush(req.body.coupon,req.session.user._id)
     }
-    userhelpers.placeOrder(req.body, products, totalAmount).then((orderId) => {
+    userhelpers.placeOrder(req.body, products, totalAmount).then(async(orderId) => {
       if (req.body["paymentmethod"] == "COD") {
         res.json({ codPayment: true });
       } else if (req.body.paymentmethod == "Razorpay") {
-        console.log(totalAmount);
+        
         userhelpers.generateRazorpay(orderId, totalAmount).then((response) => {
           res.json(response);
         });
       }
       else if(req.body['paymentmethod']=="wallet"){
+        let status = await userhelpers.changePaymentstatus(orderId,req.session.user._id)
         
         userhelpers.updateWallet(req.session.user._id,totalAmount).then((response)=>{
           res.json(response)

@@ -1,17 +1,26 @@
 const { response } = require('../app')
 const fs = require('fs')
 const categoryhelpers = require('../helpers/category_helpers')
-
+let categoryz
 
 module.exports.addCategories=(req,res)=>{
-    res.render('admin/admin_addcategory',{admin:true})
+    res.render('admin/admin_addcategory',{admin:true,categoryz})
+    categoryz=""
   }
 
 module.exports.addCategoryPost=(req,res)=>{
     const category = req.body
     category.img = req.files[0].filename
-    categoryhelpers.addCategory(category,()=>{
-      res.redirect('/admin/addcategory')
+    categoryhelpers.addCategory(category).then((response)=>{
+      if(response){
+        categoryz=response
+        res.redirect('/admin/addcategory')
+      }else{
+       
+        res.redirect('/admin/addcategory')
+
+      }
+      
     })
   }
 
