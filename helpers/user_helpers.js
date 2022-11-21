@@ -1260,6 +1260,7 @@ module.exports = {
         })
     },
     cancelOrder:(orderId,proId,userId)=>{
+        console.log('.....................///////////////');
         return new Promise(async(resolve,reject)=>{
             let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({_id:objectid(orderId)})
             db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:objectid(orderId),'products.item':objectid(proId)},
@@ -1286,14 +1287,11 @@ module.exports = {
                     ]).toArray()
                     console.log(pro[0]);
                     let amount
-                    console.log(pro[0].products.amount);
                     if(pro[0].products.offerprice){
                         amount=pro[0].products.offerprice
                     }else{
                         amount=pro[0].products.amount
                     }
-                    console.log('////////......................><><><><><><>');
-                    console.log(amount);
                     let datez = new Date()
                         let timez = datez.toLocaleTimeString('en-US')
                         day =datez.getDate()
@@ -1309,6 +1307,7 @@ module.exports = {
                         message:"Product Cancellation",
                         date:new Date()
                     }
+                   
                     let wallet = await db.get().collection(collection.WALLET_COLLECTION).findOne({user:objectid(userId)})
 
                     let balance = wallet.balance+amount

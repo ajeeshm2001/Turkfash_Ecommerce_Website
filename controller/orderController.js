@@ -118,6 +118,7 @@ module.exports.userPlaceOrder= async (req, res) => {
 
 
   module.exports.cancelOrderedProduct=(req,res)=>{
+   
     userhelpers.cancelOrder(req.body.orderId,req.body.proId,req.session.user._id).then((response)=>{
       res.json(response)
     })

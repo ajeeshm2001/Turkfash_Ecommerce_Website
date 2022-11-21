@@ -1,15 +1,14 @@
 var express = require("express");
 var router = express.Router();
 var userhelpers = require("../helpers/user_helpers");
-const { userLoginPage, userSignUpPage, userSignUpPagePost, userLoginPagePost, userLogOut, userOtpLogin, userOtpSendCode, userOtpVerificationPage, userOtpVerification, userProductDetails, userViewCategory, userHomepage, userDashboard, userProfileUpdate, userPasswordUpdate, userAddAddress, userAddressDelete, userCoupons, searchProduct } = require("../controller/userController");
+const { userLoginPage, userSignUpPage, userSignUpPagePost, userLoginPagePost, userLogOut, userOtpLogin, userOtpSendCode, userOtpVerificationPage, userOtpVerification, userProductDetails, userViewCategory, userHomepage, userDashboard, userProfileUpdate, userPasswordUpdate, userAddAddress, userAddressDelete, userCoupons, searchProduct, paginationProduct } = require("../controller/userController");
 const paypal = require("paypal-rest-sdk");
 const { addToCart, viewCart, changeProductQuantity, deleteCartProduct, userCartCount } = require("../controller/cartController");
 const { viewWishlist, addProductsToWishlist, addProductToCartWishlist, orderSuccess, deleteWishlistProducts } = require("../controller/wishlistController");
 const { userPlaceOrder, userPlaceOrderPost, getOrderProduct, viewOrderProduct, returnProducts, returnOrderProduct, returnOrderProductPost, cancelOrderedProduct } = require("../controller/orderController");
 const { razorpayPayment, paypalPayment, paypalPaymentSuccess, retryPayment, walletBalance } = require("../controller/paymentController");
 const { response } = require("../app");
-const category_helpers = require("../helpers/category_helpers");
-const product_helpers = require("../helpers/product_helpers");
+const { viewBrandProduct } = require("../controller/categoryController");
 
 paypal.configure({
   mode: "sandbox", //sandbox or live
@@ -25,6 +24,18 @@ const userSession = (req, res, next) => {
     res.redirect("/login");
   }
 };
+
+const cartSession =async (req,res,next)=>{
+  if(req.session.loggedIn){
+    let cartCount = await userhelpers.getCartCount(req.session.user._id);
+    let wishlistCount = await userhelpers.getWishCount(req.session.user._id);
+    res.locals.cartCount=cartCount
+    res.locals.wishlistCount=wishlistCount
+    next()
+  }else{
+    res.redirect('/login')
+  }
+}
 
 
 /*... USER HOMEPAGE ...*/
@@ -52,16 +63,16 @@ router.get("/otpverification",userOtpVerificationPage);
 router.post("/verify",userOtpVerification);
 
 /*...  USER PRODUCT DETAILS ...*/
-router.get("/userproduct/:id",userProductDetails);
+router.get("/userproduct/:id",cartSession,userProductDetails);
 
 /*...  USER VIEW CATEGORY ...*/
-router.get("/viewcategory/:id",userSession,userViewCategory);
+router.get("/viewcategory/:id",userSession,cartSession,userViewCategory);
 
 /*...  USER ADD PRODUCT TO WISHLIST ...*/
 router.get("/wishlist/:id",addProductsToWishlist);
 
 /*...  USER WISHLIST ...*/
-router.get("/wishlist", userSession,viewWishlist);
+router.get("/wishlist", userSession,cartSession,viewWishlist);
 
 /*...  USER MOVE PRODUCT FROM WISHLIST TO CART ...*/
 router.get("/addTocartwishlist/:id", userSession,addProductToCartWishlist);
@@ -73,7 +84,7 @@ router.delete("/removewishlist",deleteWishlistProducts);
 router.get("/addtocart/:id",addToCart);
 
 /*...  USER VIEW CART ...*/
-router.get("/viewcart", userSession,viewCart);
+router.get("/viewcart", userSession,cartSession,viewCart);
 
 /*...  CHANGE PRODUCT QUANTITY IN CART ...*/
 router.put("/changequantity",changeProductQuantity);
@@ -82,13 +93,13 @@ router.put("/changequantity",changeProductQuantity);
 router.delete("/removeproduct",deleteCartProduct);
 
 /*...  USER PLACE ORDER ...*/
-router.get("/placeorder", userSession,userPlaceOrder);
+router.get("/placeorder", userSession,cartSession,userPlaceOrder);
 
 /*...  USER PLACE ORDER POST ...*/
-router.post("/placeorder/:total",userPlaceOrderPost);
+router.post("/placeorder/:total",cartSession,userPlaceOrderPost);
 
 /*...  USER DASHBOARD ...*/
-router.get("/dashboard/:url", userSession,userDashboard);
+router.get("/dashboard/:url", userSession,cartSession,userDashboard);
 
 /*...  RAZORPAY PAYMENT ...*/
 router.post("/verify-payment",razorpayPayment);
@@ -115,22 +126,22 @@ router.delete('/deleteaddress/:id',userAddressDelete)
 router.post('/coupon',userCoupons)
 
 /*...  USER SEARCH PRODUCT ...*/
-router.post('/search',userSession,searchProduct)
+router.post('/search',userSession,cartSession,searchProduct)
 
 /*...  USER CART COUNT ...*/
 router.get('/countcart',userCartCount)
 
 /*...  USER ORDER SUCCESS PAGE ...*/
-router.get('/ordersuccess',userSession,orderSuccess)
+router.get('/ordersuccess',userSession,cartSession,orderSuccess)
 
 /*...  USER GET ORDER PRODUCTS ...*/
-router.get("/getorderproduct/:id",getOrderProduct); 
+router.get("/getorderproduct/:id",cartSession,getOrderProduct); 
 
 /*...  USER VIEW ORDER PRODUCTS ...*/
-router.get('/vieworderproducts/:id',viewOrderProduct)
+router.get('/vieworderproducts/:id',cartSession,viewOrderProduct)
 
 /*...  USER RETURN ORDER PRODUCTS ...*/
-router.get('/returnproduct/:id',returnProducts)
+router.get('/returnproduct/:id',cartSession,returnProducts)
 
 /*...  USER RETRY PAYMENT ...*/
 router.post('/retrypayment',retryPayment)
@@ -139,7 +150,7 @@ router.post('/retrypayment',retryPayment)
 router.post('/walletbalance',walletBalance)
 
 /*...  USER RETURN ORDER PRODUCT ...*/
-router.get('/returnorder/:orderId/:proId',returnOrderProduct)
+router.get('/returnorder/:orderId/:proId',cartSession,returnOrderProduct)
 
 /*...  USER RETURN ORDER PRODUCT POST ...*/
 router.post('/returnproduct',returnOrderProductPost)
@@ -147,54 +158,14 @@ router.post('/returnproduct',returnOrderProductPost)
 /*...  USER CANCEL PRODUCT ...*/
 router.post('/cancelorder',userSession,cancelOrderedProduct)
 
+/*...  USER VIEW BRAND PRODUCT ...*/
+router.get('/viewbrandproduct/:name',userSession,cartSession,viewBrandProduct)
+
+/*...  USER PAGINATION VIEW ...*/
+router.get('/pagination/',userSession,cartSession,paginationProduct)
+
 
 router.get('/hi',(req,res)=>{
   res.json(response)
-})
-
-
-router.get('/viewbrandproduct/:name',userSession,(req,res)=>{
-  category_helpers.getBrandProducts(req.params.name).then((products)=>{
-    res.render('user/user-viewbrand',{products,length:products.length,users:true,userheadz:true,user:req.session.user})
-  })
-})
-
-
-router.get('/pagination/',userSession,(req,res)=>{
-  product_helpers.getAllProducts().then(async(data)=>{
-    const page = parseInt(req.query.page)
-    const limit = parseInt(5)
-    const startIndex = (page-1)*limit
-    const endIndex = page*limit
-    const products={}
-    if(endIndex<data.length){
-      products.next={
-        page:page+1,
-        limit:limit
-      }
-    }
-    
-    if(startIndex>0){
-      products.previous={
-        page:page-1,
-        limit:limit
-      }
-    }
-    let length = data.length
-
-    products.products=await product_helpers.getPaginatedProducts(limit,startIndex)
-    products.pagecount=Math.ceil(parseInt(data.length)/limit)
-    products.pages = Array.from({length:products.pagecount},(_,i)=>
-      i+1
-    )
-    products.currentpage=page
-
-    console.log(products.pages);
-
-    let pagproducts=products.products
-    let pages = products.pages
-    
-    res.render('user/user-paginationproducts',{userheadz:true,users:true,pagproducts,pages,products,length,limit,user:req.session.user})
-  })
 })
 module.exports = router;

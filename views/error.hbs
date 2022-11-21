@@ -1,6 +1,7 @@
 {{!-- <h1>{{message}}</h1>
 <h2>{{error.status}}</h2>
 <pre>{{error.stack}}</pre> --}}
+{{#if user}}
 <section class="page_404">
     <div class="container">
       <div class="row">
@@ -26,3 +27,4 @@
       </div>
     </div>
   </section>
+  {{/if}}

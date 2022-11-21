@@ -5,6 +5,7 @@ var bannerhelpers = require("../helpers/banner_helpers");
 const { CART_HELPERS } = require("../config/collection");
 const coupon_helpers = require("../helpers/coupon_helpers");
 const saleshelpers = require('../helpers/sales_helpers')
+const product_helpers=require('../helpers/product_helpers')
 
 const client = require("twilio")(
   process.env.TWILIO_SID_KEY,
@@ -279,4 +280,43 @@ module.exports.searchProduct=(req,res)=>{
   }catch(err){
       res.send(err)
   }
+}
+
+
+module.exports.paginationProduct=(req,res)=>{
+  product_helpers.getAllProducts().then(async(data)=>{
+    const page = parseInt(req.query.page)
+    const limit = parseInt(5)
+    const startIndex = (page-1)*limit
+    const endIndex = page*limit
+    const products={}
+    if(endIndex<data.length){
+      products.next={
+        page:page+1,
+        limit:limit
+      }
+    }
+    
+    if(startIndex>0){
+      products.previous={
+        page:page-1,
+        limit:limit
+      }
+    }
+    let length = data.length
+
+    products.products=await product_helpers.getPaginatedProducts(limit,startIndex)
+    products.pagecount=Math.ceil(parseInt(data.length)/limit)
+    products.pages = Array.from({length:products.pagecount},(_,i)=>
+      i+1
+    )
+    products.currentpage=page
+
+    console.log(products.pages);
+
+    let pagproducts=products.products
+    let pages = products.pages
+    
+    res.render('user/user-paginationproducts',{userheadz:true,users:true,pagproducts,pages,products,length,limit,user:req.session.user})
+  })
 }

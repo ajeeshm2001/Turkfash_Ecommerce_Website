@@ -91,3 +91,10 @@ module.exports.addCategoryPost=(req,res)=>{
   
     })
   }
+
+
+  module.exports.viewBrandProduct=(req,res)=>{
+    categoryhelpers.getBrandProducts(req.params.name).then((products)=>{
+      res.render('user/user-viewbrand',{products,length:products.length,users:true,userheadz:true,user:req.session.user})
+    })
+  }

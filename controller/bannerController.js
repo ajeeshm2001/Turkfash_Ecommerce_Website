@@ -17,7 +17,7 @@ module.exports.adminAddBannerPost=(req,res)=>{
 
 
   module.exports.adminViewBanner=async(req,res)=>{
-    let banner = await banner_helpers.getAllbanners()
+    let banner = await bannerhelpers.getAllbanners()
     banners=banner[0]
     res.render('admin/admin_viewbanner',{admin:true,banner,banners})
   }
